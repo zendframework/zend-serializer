@@ -26,10 +26,10 @@
 namespace Zend\Serializer\Adapter;
 
 use Zend\Serializer\Exception as SerializationException,
-    Zend\JSON\JSON as ZendJSON;
+    Zend\Json\Json as ZendJson;
 
 /**
- * @uses       Zend\JSON\JSON
+ * @uses       Zend\Json\Json
  * @uses       Zend\Serializer\Adapter\AbstractAdapter
  * @uses       Zend\Serializer\Exception
  * @category   Zend
@@ -38,7 +38,7 @@ use Zend\Serializer\Exception as SerializationException,
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class JSON extends AbstractAdapter
+class Json extends AbstractAdapter
 {
     /**
      * @var array Default options
@@ -46,7 +46,7 @@ class JSON extends AbstractAdapter
     protected $_options = array(
         'cycleCheck'           => false,
         'enableJsonExprFinder' => false,
-        'objectDecodeType'     => ZendJSON::TYPE_ARRAY,
+        'objectDecodeType'     => ZendJson::TYPE_ARRAY,
     );
 
     /**
@@ -62,7 +62,7 @@ class JSON extends AbstractAdapter
         $opts = $opts + $this->_options;
 
         try  {
-            return ZendJSON::encode($value, $opts['cycleCheck'], $opts);
+            return ZendJson::encode($value, $opts['cycleCheck'], $opts);
         } catch (\Exception $e) {
             throw new SerializationException('Serialization failed', 0, $e);
         }
@@ -80,7 +80,7 @@ class JSON extends AbstractAdapter
         $opts = $opts + $this->_options;
 
         try {
-            $ret = ZendJSON::decode($json, $opts['objectDecodeType']);
+            $ret = ZendJson::decode($json, $opts['objectDecodeType']);
         } catch (\Exception $e) {
             throw new SerializationException('Unserialization failed by previous error', 0, $e);
         }
