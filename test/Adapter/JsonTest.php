@@ -25,6 +25,8 @@
  */
 namespace ZendTest\Serializer\Adapter;
 
+use Zend\Serializer;
+
 /**
  * @category   Zend
  * @package    Zend_Serializer
@@ -32,14 +34,14 @@ namespace ZendTest\Serializer\Adapter;
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class JSONTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends \PHPUnit_Framework_TestCase
 {
 
     private $_adapter;
 
     public function setUp()
     {
-        $this->_adapter = new \Zend\Serializer\Adapter\JSON();
+        $this->_adapter = new Serializer\Adapter\Json();
     }
 
     public function tearDown()
@@ -143,7 +145,7 @@ class JSONTest extends \PHPUnit_Framework_TestCase
         $expected   = new \stdClass();
         $expected->test = 'test';
 
-        $data = $this->_adapter->unserialize($value, array('objectDecodeType' => \Zend\JSON\JSON::TYPE_OBJECT));
+        $data = $this->_adapter->unserialize($value, array('objectDecodeType' => \Zend\Json\Json::TYPE_OBJECT));
         $this->assertEquals($expected, $data);
     }
 

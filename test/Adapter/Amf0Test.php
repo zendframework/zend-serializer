@@ -25,6 +25,8 @@
  */
 namespace ZendTest\Serializer\Adapter;
 
+use Zend\Serializer;
+
 /**
  * @category   Zend
  * @package    Zend_Serializer
@@ -32,14 +34,14 @@ namespace ZendTest\Serializer\Adapter;
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class AMF0Test extends \PHPUnit_Framework_TestCase
+class Amf0Test extends \PHPUnit_Framework_TestCase
 {
 
     private $_adapter;
 
     public function setUp()
     {
-        $this->_adapter = new \Zend\Serializer\Adapter\AMF0();
+        $this->_adapter = new Serializer\Adapter\Amf0();
     }
 
     public function tearDown()

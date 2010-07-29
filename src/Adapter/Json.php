@@ -26,13 +26,10 @@
 namespace Zend\Serializer\Adapter;
 
 use Zend\Serializer\Exception as SerializationException,
-    Zend\AMF\Parser as AMFParser;
+    Zend\Json\Json as ZendJson;
 
 /**
- * @uses       Zend\AMF\Parser\AMF3\Deserializer
- * @uses       Zend\AMF\Parser\AMF3\Serializer
- * @uses       Zend\AMF\Parser\InputStream
- * @uses       Zend\AMF\Parser\OutputStream
+ * @uses       Zend\Json\Json
  * @uses       Zend\Serializer\Adapter\AbstractAdapter
  * @uses       Zend\Serializer\Exception
  * @category   Zend
@@ -41,44 +38,58 @@ use Zend\Serializer\Exception as SerializationException,
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class AMF3 extends AbstractAdapter
+class Json extends AbstractAdapter
 {
     /**
-     * Serialize a PHP value to AMF3 format
+     * @var array Default options
+     */
+    protected $_options = array(
+        'cycleCheck'           => false,
+        'enableJsonExprFinder' => false,
+        'objectDecodeType'     => ZendJson::TYPE_ARRAY,
+    );
+
+    /**
+     * Serialize PHP value to JSON
      * 
      * @param  mixed $value 
      * @param  array $opts 
      * @return string
-     * @throws \Zend\Serializer\Exception
+     * @throws \Zend\Serializer\Exception on JSON encoding exception
      */
     public function serialize($value, array $opts = array())
     {
+        $opts = $opts + $this->_options;
+
         try  {
-            $stream     = new AMFParser\OutputStream();
-            $serializer = new AMFParser\AMF3\Serializer($stream);
-            $serializer->writeTypeMarker($value);
-            return $stream->getStream();
+            return ZendJson::encode($value, $opts['cycleCheck'], $opts);
         } catch (\Exception $e) {
-            throw new SerializationException('Serialization failed by previous error', 0, $e);
+            throw new SerializationException('Serialization failed', 0, $e);
         }
     }
 
     /**
-     * Deserialize an AMF3 value to PHP
+     * Deserialize JSON to PHP value
      * 
-     * @param  mixed $value 
+     * @param  string $json 
      * @param  array $opts 
-     * @return string
-     * @throws \Zend\Serializer\Exception
+     * @return mixed
      */
-    public function unserialize($value, array $opts = array())
+    public function unserialize($json, array $opts = array())
     {
+        $opts = $opts + $this->_options;
+
         try {
-            $stream       = new AMFParser\InputStream($value);
-            $deserializer = new AMFParser\AMF3\Deserializer($stream);
-            return $deserializer->readTypeMarker();
+            $ret = ZendJson::decode($json, $opts['objectDecodeType']);
         } catch (\Exception $e) {
             throw new SerializationException('Unserialization failed by previous error', 0, $e);
         }
+
+        // json_decode returns null for invalid JSON
+        if ($ret === null && $json !== 'null') {
+            throw new SerializationException('Invalid json data');
+        }
+
+        return $ret;
     }
 }
