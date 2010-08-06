@@ -26,13 +26,13 @@
 namespace Zend\Serializer\Adapter;
 
 use Zend\Serializer\Exception as SerializationException,
-    Zend\AMF\Parser as AMFParser;
+    Zend\Amf\Parser as AMFParser;
 
 /**
- * @uses       Zend\AMF\Parser\AMF0\Deserializer
- * @uses       Zend\AMF\Parser\AMF0\Serializer
- * @uses       Zend\AMF\Parser\InputStream
- * @uses       Zend\AMF\Parser\OutputStream
+ * @uses       Zend\Amf\Parser\Amf3\Deserializer
+ * @uses       Zend\Amf\Parser\Amf3\Serializer
+ * @uses       Zend\Amf\Parser\InputStream
+ * @uses       Zend\Amf\Parser\OutputStream
  * @uses       Zend\Serializer\Adapter\AbstractAdapter
  * @uses       Zend\Serializer\Exception
  * @category   Zend
@@ -41,10 +41,10 @@ use Zend\Serializer\Exception as SerializationException,
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class AMF0 extends AbstractAdapter
+class AMF3 extends AbstractAdapter
 {
     /**
-     * Serialize a PHP value to AMF0 format
+     * Serialize a PHP value to AMF3 format
      * 
      * @param  mixed $value 
      * @param  array $opts 
@@ -55,7 +55,7 @@ class AMF0 extends AbstractAdapter
     {
         try  {
             $stream     = new AMFParser\OutputStream();
-            $serializer = new AMFParser\AMF0\Serializer($stream);
+            $serializer = new AMFParser\Amf3\Serializer($stream);
             $serializer->writeTypeMarker($value);
             return $stream->getStream();
         } catch (\Exception $e) {
@@ -64,18 +64,18 @@ class AMF0 extends AbstractAdapter
     }
 
     /**
-     * Unserialize an AMF0 value to PHP
+     * Deserialize an AMF3 value to PHP
      * 
      * @param  mixed $value 
      * @param  array $opts 
-     * @return void
+     * @return string
      * @throws \Zend\Serializer\Exception
      */
     public function unserialize($value, array $opts = array())
     {
         try {
             $stream       = new AMFParser\InputStream($value);
-            $deserializer = new AMFParser\AMF0\Deserializer($stream);
+            $deserializer = new AMFParser\Amf3\Deserializer($stream);
             return $deserializer->readTypeMarker();
         } catch (\Exception $e) {
             throw new SerializationException('Unserialization failed by previous error', 0, $e);
