@@ -14,22 +14,41 @@
  *
  * @category   Zend
  * @package    Zend_Serializer
- * @subpackage UnitTests
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-/**
- * @namespace
- */
-namespace ZendTest\Serializer\TestAsset;
+namespace Zend\Serializer;
+
+use Zend\Loader\PluginBroker;
 
 /**
+ * Broker for serializer adapter instances
+ *
  * @category   Zend
  * @package    Zend_Serializer
- * @subpackage UnitTests
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Dummy
-{}
+class AdapterBroker extends PluginBroker
+{
+    /**
+     * @var string Default plugin loading strategy
+     */
+    protected $defaultClassLoader = 'Zend\Serializer\AdapterLoader';
+
+    /**
+     * Determine if we have a valid adapter
+     * 
+     * @param  mixed $plugin 
+     * @return true
+     * @throws Exception
+     */
+    protected function validatePlugin($plugin)
+    {
+        if (!$plugin instanceof Adapter) {
+            throw new Exception('Serializer adapters must implement Zend\Serializer\Adapter');
+        }
+        return true;
+    }
+}
