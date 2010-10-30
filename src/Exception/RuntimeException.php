@@ -16,20 +16,20 @@
  * @package    Zend_Serializer
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id$
  */
 
 /**
  * @namespace
  */
-namespace Zend\Serializer;
+namespace Zend\Serializer\Exception;
 
 /**
- * @uses      Zend\Exception
- * @category  Zend
- * @package   Zend_Serializer
- * @copyright Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @used       RuntimeException
+ * @category   Zend
+ * @package    Zend_Serializer
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-interface Exception
-{
-}
+class RuntimeException extends \RuntimeException implements \Zend\Serializer\Exception
+{}
