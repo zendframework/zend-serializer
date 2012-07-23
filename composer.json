@@ -1,6 +1,6 @@
 {
     "name": "zendframework/zend-serializer",
-    "description": "Zend\\Serializer component",
+    "description": "provides an adapter based interface to simply generate storable representation of PHP types by different facilities, and recover",
     "license": "BSD-3-Clause",
     "keywords": [
         "zf2",
@@ -9,11 +9,11 @@
     "homepage": "https://github.com/zendframework/zend-serializer",
     "autoload": {
         "psr-4": {
-            "Zend\\Serializer\\": "src/"
+            "Zend\\Serializer": "src/"
         }
     },
     "require": {
-        "php": ">=5.3.23",
+        "php": ">=5.3.3",
         "zendframework/zend-stdlib": "self.version",
         "zendframework/zend-json": "self.version",
         "zendframework/zend-math": "self.version"
