@@ -9,7 +9,7 @@
     "homepage": "https://github.com/zendframework/zend-serializer",
     "autoload": {
         "psr-4": {
-            "Zend\\Serializer": "src/"
+            "Zend\\Serializer\\": "src/"
         }
     },
     "require": {
