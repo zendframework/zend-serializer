@@ -8,12 +8,14 @@
  * @package   Zend_Serializer
  */
 
-namespace Zend\Serializer\Exception;
+namespace Zend\Serializer\Adapter;
+
+use Zend\Stdlib\AbstractOptions;
 
 /**
- * @used       RuntimeException
  * @category   Zend
  * @package    Zend_Serializer
+ * @subpackage Adapter
  */
-class RuntimeException extends \RuntimeException implements ExceptionInterface
+class AdapterOptions extends AbstractOptions
 {}

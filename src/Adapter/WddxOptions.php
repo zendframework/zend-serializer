@@ -10,28 +10,40 @@
 
 namespace Zend\Serializer\Adapter;
 
+
 /**
  * @category   Zend
  * @package    Zend_Serializer
  * @subpackage Adapter
  */
-interface AdapterInterface
+class WddxOptions extends AdapterOptions
 {
     /**
-     * Generates a storable representation of a value.
+     * Wddx packet header comment
      *
-     * @param  mixed $value Data to serialize
-     * @return string
-     * @throws \Zend\Serializer\Exception\ExceptionInterface
+     * @var string
      */
-    public function serialize($value);
+    protected $comment = '';
 
     /**
-     * Creates a PHP value from a stored representation.
+     * Set WDDX header comment
      *
-     * @param  string $serialized Serialized string
-     * @return mixed
-     * @throws \Zend\Serializer\Exception\ExceptionInterface
+     * @param  string $comment
+     * @return WddxOptions
      */
-    public function unserialize($serialized);
+    public function setComment($comment)
+    {
+        $this->comment = (string) $comment;
+        return $this;
+    }
+
+    /**
+     * Get WDDX header comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
 }
