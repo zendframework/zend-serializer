@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -12,44 +12,44 @@ namespace Zend\Serializer\Adapter;
 use Zend\Serializer\Exception;
 use Zend\Stdlib\ErrorHandler;
 
-class IgBinary extends AbstractAdapter
+class MsgPack extends AbstractAdapter
 {
     /**
-     * @var string Serialized null value
+     * @var string Serialized 0 value
      */
-    private static $serializedNull = null;
+    private static $serialized0 = null;
 
     /**
      * Constructor
      *
-     * @throws Exception\ExtensionNotLoadedException If igbinary extension is not present
+     * @throws Exception\ExtensionNotLoadedException If msgpack extension is not present
      */
     public function __construct($options = null)
     {
-        if (!extension_loaded('igbinary')) {
+        if (!extension_loaded('msgpack')) {
             throw new Exception\ExtensionNotLoadedException(
-                'PHP extension "igbinary" is required for this adapter'
+                'PHP extension "msgpack" is required for this adapter'
             );
         }
 
-        if (static::$serializedNull === null) {
-            static::$serializedNull = igbinary_serialize(null);
+        if (self::$serialized0 === null) {
+            self::$serialized0 = msgpack_serialize(0);
         }
 
         parent::__construct($options);
     }
 
     /**
-     * Serialize PHP value to igbinary
+     * Serialize PHP value to msgpack
      *
      * @param  mixed $value
      * @return string
-     * @throws Exception\RuntimeException on igbinary error
+     * @throws Exception\RuntimeException on msgpack error
      */
     public function serialize($value)
     {
         ErrorHandler::start();
-        $ret = igbinary_serialize($value);
+        $ret = msgpack_serialize($value);
         $err = ErrorHandler::stop();
 
         if ($ret === false) {
@@ -60,23 +60,23 @@ class IgBinary extends AbstractAdapter
     }
 
     /**
-     * Deserialize igbinary string to PHP value
+     * Deserialize msgpack string to PHP value
      *
      * @param  string $serialized
      * @return mixed
-     * @throws Exception\RuntimeException on igbinary error
+     * @throws Exception\RuntimeException on msgpack error
      */
     public function unserialize($serialized)
     {
-        if ($serialized === static::$serializedNull) {
-            return null;
+        if ($serialized === self::$serialized0) {
+            return 0;
         }
 
         ErrorHandler::start();
-        $ret = igbinary_unserialize($serialized);
+        $ret = msgpack_unserialize($serialized);
         $err = ErrorHandler::stop();
 
-        if ($ret === null) {
+        if ($ret === 0) {
             throw new Exception\RuntimeException('Unserialization failed', 0, $err);
         }
 
