@@ -11,6 +11,7 @@
 namespace ZendTest\Serializer\Adapter;
 
 use Zend\Serializer;
+use Zend\Serializer\Exception\ExtensionNotLoadedException;
 
 /**
  * @category   Zend
@@ -18,17 +19,23 @@ use Zend\Serializer;
  * @subpackage UnitTests
  * @group      Zend_Serializer
  */
-class PhpSerializeTest extends \PHPUnit_Framework_TestCase
+class MsgPackTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
-     * @var Serializer\Adapter\PhpSerialize
+     * @var Serializer\Adapter\MsgPack
      */
     private $adapter;
 
     public function setUp()
     {
-        $this->adapter = new Serializer\Adapter\PhpSerialize();
+        if (!extension_loaded('msgpack')) {
+            try {
+                new Serializer\Adapter\MsgPack();
+                $this->fail("Zend\\Serializer\\Adapter\\MsgPack needs missing ext/msgpack but did't throw exception");
+            } catch (ExtensionNotLoadedException $e) {}
+            $this->markTestSkipped('Zend\\Serializer\\Adapter\\MsgPack needs ext/msgpack');
+        }
+        $this->adapter = new Serializer\Adapter\MsgPack();
     }
 
     public function tearDown()
@@ -39,7 +46,7 @@ class PhpSerializeTest extends \PHPUnit_Framework_TestCase
     public function testSerializeString()
     {
         $value    = 'test';
-        $expected = 's:4:"test";';
+        $expected = msgpack_serialize($value);
 
         $data = $this->adapter->serialize($value);
         $this->assertEquals($expected, $data);
@@ -48,7 +55,7 @@ class PhpSerializeTest extends \PHPUnit_Framework_TestCase
     public function testSerializeFalse()
     {
         $value    = false;
-        $expected = 'b:0;';
+        $expected = msgpack_serialize($value);
 
         $data = $this->adapter->serialize($value);
         $this->assertEquals($expected, $data);
@@ -57,7 +64,7 @@ class PhpSerializeTest extends \PHPUnit_Framework_TestCase
     public function testSerializeNull()
     {
         $value    = null;
-        $expected = 'N;';
+        $expected = msgpack_serialize($value);
 
         $data = $this->adapter->serialize($value);
         $this->assertEquals($expected, $data);
@@ -66,7 +73,7 @@ class PhpSerializeTest extends \PHPUnit_Framework_TestCase
     public function testSerializeNumeric()
     {
         $value    = 100;
-        $expected = 'i:100;';
+        $expected = msgpack_serialize($value);
 
         $data = $this->adapter->serialize($value);
         $this->assertEquals($expected, $data);
@@ -75,7 +82,7 @@ class PhpSerializeTest extends \PHPUnit_Framework_TestCase
     public function testSerializeObject()
     {
         $value    = new \stdClass();
-        $expected = 'O:8:"stdClass":0:{}';
+        $expected = msgpack_serialize($value);
 
         $data = $this->adapter->serialize($value);
         $this->assertEquals($expected, $data);
@@ -83,8 +90,8 @@ class PhpSerializeTest extends \PHPUnit_Framework_TestCase
 
     public function testUnserializeString()
     {
-        $value    = 's:4:"test";';
         $expected = 'test';
+        $value    = msgpack_serialize($expected);
 
         $data = $this->adapter->unserialize($value);
         $this->assertEquals($expected, $data);
@@ -92,8 +99,8 @@ class PhpSerializeTest extends \PHPUnit_Framework_TestCase
 
     public function testUnserializeFalse()
     {
-        $value    = 'b:0;';
         $expected = false;
+        $value    = msgpack_serialize($expected);
 
         $data = $this->adapter->unserialize($value);
         $this->assertEquals($expected, $data);
@@ -101,8 +108,8 @@ class PhpSerializeTest extends \PHPUnit_Framework_TestCase
 
     public function testUnserializeNull()
     {
-        $value    = 'N;';
         $expected = null;
+        $value    = msgpack_serialize($expected);
 
         $data = $this->adapter->unserialize($value);
         $this->assertEquals($expected, $data);
@@ -110,8 +117,8 @@ class PhpSerializeTest extends \PHPUnit_Framework_TestCase
 
     public function testUnserializeNumeric()
     {
-        $value    = 'i:100;';
         $expected = 100;
+        $value    = msgpack_serialize($expected);
 
         $data = $this->adapter->unserialize($value);
         $this->assertEquals($expected, $data);
@@ -119,23 +126,29 @@ class PhpSerializeTest extends \PHPUnit_Framework_TestCase
 
     public function testUnserializeObject()
     {
-        $value    = 'O:8:"stdClass":0:{}';
         $expected = new \stdClass();
+        $value    = msgpack_serialize($expected);
 
         $data = $this->adapter->unserialize($value);
         $this->assertEquals($expected, $data);
     }
 
-    public function testUnserializingNonserializedStringReturnsItVerbatim()
+    public function testUnserialize0()
     {
-        $value = 'not a serialized string';
-        $this->assertEquals($value, $this->adapter->unserialize($value));
+        $expected = 0;
+        $value    = msgpack_serialize($expected);
+
+        $data = $this->adapter->unserialize($value);
+        $this->assertEquals($expected, $data);
     }
 
-    public function testUnserializingInvalidStringRaisesException()
+    public function testUnserialzeInvalid()
     {
-        $value = 'a:foobar';
-        $this->setExpectedException('Zend\Serializer\Exception\RuntimeException');
+        $value = "\0\1\r\n";
+        $this->setExpectedException(
+            'Zend\Serializer\Exception\RuntimeException',
+            'Unserialization failed'
+        );
         $this->adapter->unserialize($value);
     }
 }
