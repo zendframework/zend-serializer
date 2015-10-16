@@ -10,6 +10,7 @@
 namespace Zend\Serializer;
 
 use Zend\ServiceManager\AbstractPluginManager;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 /**
  * Plugin manager implementation for serializer adapters.
@@ -20,42 +21,32 @@ use Zend\ServiceManager\AbstractPluginManager;
  */
 class AdapterPluginManager extends AbstractPluginManager
 {
-    /**
-     * Default set of adapters
-     *
-     * @var array
-     */
-    protected $invokableClasses = array(
-        'igbinary'     => 'Zend\Serializer\Adapter\IgBinary',
-        'json'         => 'Zend\Serializer\Adapter\Json',
-        'msgpack'      => 'Zend\Serializer\Adapter\MsgPack',
-        'phpcode'      => 'Zend\Serializer\Adapter\PhpCode',
-        'phpserialize' => 'Zend\Serializer\Adapter\PhpSerialize',
-        'pythonpickle' => 'Zend\Serializer\Adapter\PythonPickle',
-        'wddx'         => 'Zend\Serializer\Adapter\Wddx',
-    );
+    protected $aliases = [
+        'igbinary'     => Adapter\IgBinary::class,
+        'IgBinary'     => Adapter\IgBinary::class,
+        'json'         => Adapter\Json::class,
+        'Json'         => Adapter\Json::class,
+        'msgpack'      => Adapter\MsgPack::class,
+        'MsgPack'      => Adapter\MsgPack::class,
+        'phpcode'      => Adapter\PhpCode::class,
+        'PhpCode'      => Adapter\PhpCode::class,
+        'phpserialize' => Adapter\PhpSerialize::class,
+        'PhpSerialize' => Adapter\PhpSerialize::class,
+        'pythonpickle' => Adapter\PythonPickle::class,
+        'PythonPickle' => Adapter\PythonPickle::class,
+        'wddx'         => Adapter\Wddx::class,
+        'Wddx'         => Adapter\Wddx::class
+    ];
 
-    /**
-     * Validate the plugin
-     *
-     * Checks that the adapter loaded is an instance
-     * of Adapter\AdapterInterface.
-     *
-     * @param  mixed $plugin
-     * @return void
-     * @throws Exception\RuntimeException if invalid
-     */
-    public function validatePlugin($plugin)
-    {
-        if ($plugin instanceof Adapter\AdapterInterface) {
-            // we're okay
-            return;
-        }
+    protected $factories = [
+        Adapter\IgBinary::class     => InvokableFactory::class,
+        Adapter\Json::class         => InvokableFactory::class,
+        Adapter\MsgPack::class      => InvokableFactory::class,
+        Adapter\PhpCode::class      => InvokableFactory::class,
+        Adapter\PhpSerialize::class => InvokableFactory::class,
+        Adapter\PythonPickle::class => InvokableFactory::class,
+        Adapter\Wddx::class         => InvokableFactory::class
+    ];
 
-        throw new Exception\RuntimeException(sprintf(
-            'Plugin of type %s is invalid; must implement %s\Adapter\AdapterInterface',
-            (is_object($plugin) ? get_class($plugin) : gettype($plugin)),
-            __NAMESPACE__
-        ));
-    }
+    protected $instanceOf = Adapter\AdapterInterface::class;
 }

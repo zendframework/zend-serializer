@@ -12,6 +12,7 @@ namespace ZendTest\Serializer;
 use Zend\Serializer\Adapter;
 use Zend\Serializer\AdapterPluginManager;
 use Zend\Serializer\Serializer;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * @group      Zend_Serializer
@@ -34,7 +35,9 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
 
     public function testChangeAdapterPluginManager()
     {
-        $newPluginManager = new AdapterPluginManager();
+        $newPluginManager = new AdapterPluginManager(
+            $this->getMockBuilder('Interop\Container\ContainerInterface')->getMock()
+        );
         Serializer::setAdapterPluginManager($newPluginManager);
         $this->assertSame($newPluginManager, Serializer::getAdapterPluginManager());
     }
@@ -59,10 +62,13 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
 
     public function testFactoryOnADummyClassAdapter()
     {
-        $adapters = new AdapterPluginManager();
-        $adapters->setInvokableClass('dummy', 'ZendTest\Serializer\TestAsset\Dummy');
+        $adapters = new AdapterPluginManager(new ServiceManager, [
+            'invokables' => [
+                'dummy' => TestAsset\Dummy::class
+            ]
+        ]);
         Serializer::setAdapterPluginManager($adapters);
-        $this->setExpectedException('Zend\\Serializer\\Exception\\RuntimeException', 'AdapterInterface');
+        $this->setExpectedException('Zend\ServiceManager\Exception\InvalidServiceException', 'AdapterInterface');
         Serializer::factory('dummy');
     }
 
@@ -82,9 +88,9 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
 
     public function testFactoryPassesAdapterOptions()
     {
-        $options = new Adapter\PythonPickleOptions(array('protocol' => 2));
+        $options = new Adapter\PythonPickleOptions(['protocol' => 2]);
         /** @var Adapter\PythonPickle $adapter  */
-        $adapter = Serializer::factory('pythonpickle', $options);
+        $adapter = Serializer::factory('pythonpickle', $options->toArray());
         $this->assertInstanceOf('Zend\Serializer\Adapter\PythonPickle', $adapter);
         $this->assertEquals(2, $adapter->getOptions()->getProtocol());
     }
