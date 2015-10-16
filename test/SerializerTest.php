@@ -35,7 +35,9 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
 
     public function testChangeAdapterPluginManager()
     {
-        $newPluginManager = new AdapterPluginManager(new ServiceManager);
+        $newPluginManager = new AdapterPluginManager(
+            $this->getMockBuilder('Interop\Container\ContainerInterface')->getMock()
+        );
         Serializer::setAdapterPluginManager($newPluginManager);
         $this->assertSame($newPluginManager, Serializer::getAdapterPluginManager());
     }
@@ -66,7 +68,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
         Serializer::setAdapterPluginManager($adapters);
-        $this->setExpectedException('Zend\\Serializer\\Exception\\RuntimeException', 'AdapterInterface');
+        $this->setExpectedException('Zend\ServiceManager\Exception\InvalidServiceException', 'AdapterInterface');
         Serializer::factory('dummy');
     }
 

@@ -48,27 +48,5 @@ class AdapterPluginManager extends AbstractPluginManager
         Adapter\Wddx::class         => InvokableFactory::class
     ];
 
-    /**
-     * Validate the plugin
-     *
-     * Checks that the adapter loaded is an instance
-     * of Adapter\AdapterInterface.
-     *
-     * @param  mixed $plugin
-     * @return void
-     * @throws Exception\RuntimeException if invalid
-     */
-    public function validate($plugin)
-    {
-        if ($plugin instanceof Adapter\AdapterInterface) {
-            // we're okay
-            return;
-        }
-
-        throw new Exception\RuntimeException(sprintf(
-            'Plugin of type %s is invalid; must implement %s\Adapter\AdapterInterface',
-            (is_object($plugin) ? get_class($plugin) : gettype($plugin)),
-            __NAMESPACE__
-        ));
-    }
+    protected $instanceOf = Adapter\AdapterInterface::class;
 }
