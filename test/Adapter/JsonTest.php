@@ -10,6 +10,7 @@
 namespace ZendTest\Serializer\Adapter;
 
 use Zend\Serializer;
+use Zend\Serializer\Exception;
 
 /**
  * @group      Zend_Serializer
@@ -40,6 +41,20 @@ class JsonTest extends \PHPUnit_Framework_TestCase
             'object_decode_type'      => 1,
         ]);
         $adapter->setOptions($options);
+
+        $this->assertEquals(true, $adapter->getOptions()->getCycleCheck());
+        $this->assertEquals(true, $adapter->getOptions()->getEnableJsonExprFinder());
+        $this->assertEquals(1, $adapter->getOptions()->getObjectDecodeType());
+    }
+
+    public function testAdapterSetOptionsAsArray()
+    {
+        $adapter = new Serializer\Adapter\Json();
+        $adapter->setOptions([
+            'cycle_check'             => true,
+            'enable_json_expr_finder' => true,
+            'object_decode_type'      => 1,
+        ]);
 
         $this->assertEquals(true, $adapter->getOptions()->getCycleCheck());
         $this->assertEquals(true, $adapter->getOptions()->getEnableJsonExprFinder());
