@@ -40,6 +40,10 @@ class PhpCode extends AbstractAdapter
         $ret  = null;
         // This suppression is due to the fact that the ErrorHandler cannot
         // catch syntax errors, and is intentionally left in place.
+
+        // Work around for unserializing objects
+        $code = str_replace("stdClass::__set_state", "(object)", $code);
+
         $eval = @eval('$ret=' . $code . ';');
         $err  = ErrorHandler::stop();
 
