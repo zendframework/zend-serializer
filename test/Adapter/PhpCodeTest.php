@@ -6,19 +6,18 @@
  * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
-
 namespace ZendTest\Serializer\Adapter;
 
 use Zend\Serializer;
+use ZendTest\Serializer\TestAsset\Dummy;
+use Zend\Json\Encoder;
 
 /**
- * @group      Zend_Serializer
+ * @covers Zend\Serializer\Adapter\PhpCode
  */
 class PhpCodeTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Serializer\Adapter\PhpCode
-     */
+    /** @var Serializer\Adapter\PhpCode */
     private $adapter;
 
     public function setUp()
@@ -26,111 +25,71 @@ class PhpCodeTest extends \PHPUnit_Framework_TestCase
         $this->adapter = new Serializer\Adapter\PhpCode();
     }
 
-    public function tearDown()
-    {
-        $this->adapter = null;
-    }
-
-    public function testSerializeString()
-    {
-        $value    = 'test';
-        $expected = "'test'";
-
-        $data = $this->adapter->serialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-    public function testSerializeFalse()
-    {
-        $value    = false;
-        $expected = 'false';
-
-        $data = $this->adapter->serialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-    public function testSerializeNull()
-    {
-        $value    = null;
-        $expected = 'NULL';
-
-        $data = $this->adapter->serialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-    public function testSerializeNumeric()
-    {
-        $value    = 100.12345;
-        $expected = '100.12345';
-
-        $data = $this->adapter->serialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
+    /**
+     * Test when serializing a PHP object it matches the
+     * encode process
+     *
+     * Unserialize on PHP objects occur on Zend\Json\Encoder::encode
+     */
     public function testSerializeObject()
     {
-        $value    = new \stdClass();
-        $expected = "stdClass::__set_state(array(\n))";
+        $object = new Dummy();
+        $data = $this->adapter->serialize($object);
 
-        $data = $this->adapter->serialize($value);
-        $this->assertEquals($expected, $data);
+        $this->assertEquals(Encoder::encode($object), $data);
     }
 
-    public function testUnserializeString()
-    {
-        $value    = "'test'";
-        $expected = 'test';
-
-        $data = $this->adapter->unserialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-    public function testUnserializeFalse()
-    {
-        $value    = 'false';
-        $expected = false;
-
-        $data = $this->adapter->unserialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-    public function testUnserializeNull()
-    {
-        $value    = 'NULL';
-        $expected = null;
-
-        $data = $this->adapter->unserialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-    public function testUnserializeNumeric()
-    {
-        $value    = '100';
-        $expected = 100;
-
-        $data = $this->adapter->unserialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-/* TODO: PHP Fatal error:  Call to undefined method stdClass::__set_state()
+    /**
+     * Test when unserializing a PHP object it matches
+     * the the same instance of original class
+     *
+     * Unserialize on PHP objects occur on Zend\Json\Decoder::decode
+     */
     public function testUnserializeObject()
     {
-        $value    = "stdClass::__set_state(array(\n))";
-        $expected = new stdClass();
+        $expected = new Dummy();
+        $serialized = $this->adapter->serialize($expected);
 
-        $data = $this->adapter->unserialize($value);
-        $this->assertEquals($expected, $data);
+        $data = $this->adapter->unserialize($serialized);
+
+        $this->assertInstanceOf(get_class($expected), $data);
     }
-*/
 
-    public function testUnserializeInvalid()
+    /**
+     * @dataProvider serializedValuesProvider
+     */
+    public function testSerialize($unserialized, $serialized)
     {
-        if (version_compare(PHP_VERSION, '7', 'ge')) {
-            $this->markTestSkipped('Cannot catch parse errors in PHP 7+');
-        }
-        $value = 'not a serialized string';
+        $this->assertEquals($serialized, $this->adapter->serialize($unserialized));
+    }
 
-        $this->setExpectedException('Zend\Serializer\Exception\RuntimeException', 'syntax error');
-        $this->adapter->unserialize($value);
+    /**
+     * @dataProvider serializedValuesProvider
+     */
+    public function testUnserialize($unserialized, $serialized)
+    {
+        $this->assertEquals($unserialized, $this->adapter->unserialize($serialized));
+    }
+
+    public function serializedValuesProvider()
+    {
+        return [
+            // Description => [unserialized, serialized]
+            'String' => ['test', serialize('test')],
+            'true' => [true, serialize(true)],
+            'false' => [false, serialize(false)],
+            'null' => [null, serialize(null)],
+            'int' => [1, serialize(1)],
+            'float' => [1.2, serialize(1.2)],
+
+            // Boolean as string
+            '"true"' => ['true', serialize('true')],
+            '"false"' => ['false', serialize('false')],
+            '"null"' => ['null', serialize('null')],
+            '"1"' => ['1', serialize('1')],
+            '"1.2"' => ['1.2', serialize('1.2')],
+
+            'PHP Code with tags' => ['<?php echo "test"; ?>', serialize('<?php echo "test"; ?>')]
+        ];
     }
 }
