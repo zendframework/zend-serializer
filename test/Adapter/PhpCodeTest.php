@@ -53,89 +53,50 @@ class PhpCodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider dataProvider
+     * @dataProvider dataProviderWithScenarios
      */
-    public function testPhpCode($value, $expected, $serialize)
+    public function testPhpCode($value, $expected)
     {
-        if ($serialize) {
-            $data = $this->adapter->serialize($value);
-        } else {
-            $data = $this->adapter->unserialize($value);
-        }
+        // $value serialized should be same as $expected
+        $serializeValue = $this->adapter->serialize($value);
+        $this->assertEquals($serializeValue, $expected);
 
-        $this->assertEquals($expected, $data);
+        // $expected unserialized should be same as $value
+        $unserializeValue = $this->adapter->unserialize($expected);
+        $this->assertEquals($unserializeValue, $value);
     }
 
-    public function dataProvider()
+    public function dataProviderWithScenarios()
     {
         return [
             'Serialize String' => [
                 'value' => 'test',
-                'expected' => serialize('test'),
-                'serialize' => true
+                'expected' => serialize('test')
             ],
             'Serialize PHP Code with tags' => [
                 'value' => '<?php echo "test"; ?>',
-                'expected' => serialize('<?php echo "test"; ?>'),
-                'serialize' => true
+                'expected' => serialize('<?php echo "test"; ?>')
             ],
             'Serialize boolean true' => [
                 'value' => true,
-                'expected' => serialize(true),
-                'serialize' => true
+                'expected' => serialize(true)
             ],
             'Serialize boolean false' => [
                 'value' => false,
-                'expected' => serialize(false),
-                'serialize' => true
+                'expected' => serialize(false)
             ],
             'Serialize type null' => [
                 'value' => null,
-                'expected' => serialize(null),
-                'serialize' => true
+                'expected' => serialize(null)
             ],
             'Serialize number' => [
                 'value' => 100.12345,
-                'expected' => serialize(100.12345),
-                'serialize' => true
-            ],
-            'Unserialize string' => [
-                'value' => serialize('test'),
-                'expected' => 'test',
-                'serialize' => false
+                'expected' => serialize(100.12345)
             ],
             // Boolean as string
             'Unserialize same value boolean as string' => [
                 'value' => 'false',
-                'expected' => 'false',
-                'serialize' => false
-            ],
-            // Random code
-            'Unserialize PHP Code with tags' => [
-                'value' => serialize('<?php echo "test"; ?>'),
-                'expected' => '<?php echo "test"; ?>',
-                'serialize' => false
-            ],
-            // Booleans
-            'Unserialize same value boolean - true' => [
-                'value' => true,
-                'expected' => true,
-                'serialize' => false
-            ],
-            'Unserialize same value boolean - false' => [
-                'value' => false,
-                'expected' => false,
-                'serialize' => false
-            ],
-            'Unserialize same string null' => [
-                'value' => 'null',
-                'expected' => 'null',
-                'serialize' => false
-            ],
-            'Unserialize same string number' => [
-                'value' => '100',
-                'expected' => '100',
-                'serialize' => false
+                'expected' => serialize('false')
             ],
         ];
     }

@@ -87,7 +87,7 @@ class PhpCode extends AbstractAdapter
      * @param \StdClass $object
      *
      * @return mixed
-     * @throws Exception\RuntimeException
+     * @throws Exception\RuntimeException if no class name is found, then we cannot re-generate the class
      */
     private function extractClass(\StdClass $object)
     {
@@ -95,20 +95,18 @@ class PhpCode extends AbstractAdapter
             throw new Exception\RuntimeException('Cannot retrieve class name');
         }
 
+        // Get original class name
         $className = $object->__className;
 
-        return unserialize(
-            sprintf(
-                'O:%d:"%s"%s',
-                strlen($className),
-                $className,
-                strstr(
-                    strstr(
-                        serialize($object), '"'
-                    ), ':'
-                )
-            )
-        );
+        // Retrieve current class name
+        $serializedObjClassName = strstr(serialize($object), '"');
+        $stdClassName = strstr($serializedObjClassName, ':');
+
+        // Replace class name with the original class name
+        $serializedObject = sprintf('O:%d:"%s"%s', strlen($className), $className, $stdClassName);
+
+        // Unserialize back into object
+        return unserialize($serializedObject);
     }
 
     /**
