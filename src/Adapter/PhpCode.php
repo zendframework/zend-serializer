@@ -21,7 +21,7 @@ class PhpCode extends AbstractAdapter
      *
      * @param  mixed $value
      * @return string
-     * @throws Exception\RuntimeException
+     * @throws Exception\RuntimeException only if the parameter is already serialized
      */
     public function serialize($value)
     {
@@ -39,9 +39,8 @@ class PhpCode extends AbstractAdapter
     /**
      * Deserialize PHP string
      *
-     * @param  string $code
-     * @return mixed
-     * @throws Exception\RuntimeException
+     * @param string $code
+     * @return mixed (can be string or object)
      */
     public function unserialize($code)
     {
