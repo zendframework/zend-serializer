@@ -9,16 +9,16 @@
 
 namespace ZendTest\Serializer\Adapter;
 
+use Zend\Json\Encoder;
 use Zend\Serializer;
+use ZendTest\Serializer\TestAsset\Dummy;
 
 /**
- * @group      Zend_Serializer
+ * @covers Zend\Serializer\Adapter\PhpCode
  */
 class PhpCodeTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Serializer\Adapter\PhpCode
-     */
+    /** @var Serializer\Adapter\PhpCode */
     private $adapter;
 
     public function setUp()
@@ -31,106 +31,112 @@ class PhpCodeTest extends \PHPUnit_Framework_TestCase
         $this->adapter = null;
     }
 
-    public function testSerializeString()
-    {
-        $value    = 'test';
-        $expected = "'test'";
-
-        $data = $this->adapter->serialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-    public function testSerializeFalse()
-    {
-        $value    = false;
-        $expected = 'false';
-
-        $data = $this->adapter->serialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-    public function testSerializeNull()
-    {
-        $value    = null;
-        $expected = 'NULL';
-
-        $data = $this->adapter->serialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-    public function testSerializeNumeric()
-    {
-        $value    = 100.12345;
-        $expected = '100.12345';
-
-        $data = $this->adapter->serialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
     public function testSerializeObject()
     {
-        $value    = new \stdClass();
-        $expected = "stdClass::__set_state(array(\n))";
+        $object = new Dummy();
+        $expected = Encoder::encode($object);
 
-        $data = $this->adapter->serialize($value);
+        $data = $this->adapter->serialize($object);
+
+        $this->assertNotEmpty($data);
         $this->assertEquals($expected, $data);
     }
 
-    public function testUnserializeString()
-    {
-        $value    = "'test'";
-        $expected = 'test';
-
-        $data = $this->adapter->unserialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-    public function testUnserializeFalse()
-    {
-        $value    = 'false';
-        $expected = false;
-
-        $data = $this->adapter->unserialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-    public function testUnserializeNull()
-    {
-        $value    = 'NULL';
-        $expected = null;
-
-        $data = $this->adapter->unserialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-    public function testUnserializeNumeric()
-    {
-        $value    = '100';
-        $expected = 100;
-
-        $data = $this->adapter->unserialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-/* TODO: PHP Fatal error:  Call to undefined method stdClass::__set_state()
     public function testUnserializeObject()
     {
-        $value    = "stdClass::__set_state(array(\n))";
-        $expected = new stdClass();
+        $expected = new Dummy();
 
-        $data = $this->adapter->unserialize($value);
+        $serialized = Encoder::encode($expected);
+        $data = $this->adapter->unserialize($serialized);
+
+        $this->assertInstanceOf(get_class($expected), $data);
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testPhpCode($value, $expected, $serialize)
+    {
+        if ($serialize) {
+            $data = $this->adapter->serialize($value);
+        } else {
+            $data = $this->adapter->unserialize($value);
+        }
+
         $this->assertEquals($expected, $data);
     }
-*/
 
-    public function testUnserializeInvalid()
+    public function dataProvider()
     {
-        if (version_compare(PHP_VERSION, '7', 'ge')) {
-            $this->markTestSkipped('Cannot catch parse errors in PHP 7+');
-        }
-        $value = 'not a serialized string';
-
-        $this->setExpectedException('Zend\Serializer\Exception\RuntimeException', 'syntax error');
-        $this->adapter->unserialize($value);
+        return [
+            'Serialize String' => [
+                'value' => 'test',
+                'expected' => serialize('test'),
+                'serialize' => true
+            ],
+            'Serialize PHP Code with tags' => [
+                'value' => '<?php echo "test"; ?>',
+                'expected' => serialize('<?php echo "test"; ?>'),
+                'serialize' => true
+            ],
+            'Serialize boolean true' => [
+                'value' => true,
+                'expected' => serialize(true),
+                'serialize' => true
+            ],
+            'Serialize boolean false' => [
+                'value' => false,
+                'expected' => serialize(false),
+                'serialize' => true
+            ],
+            'Serialize type null' => [
+                'value' => null,
+                'expected' => serialize(null),
+                'serialize' => true
+            ],
+            'Serialize number' => [
+                'value' => 100.12345,
+                'expected' => serialize(100.12345),
+                'serialize' => true
+            ],
+            'Unserialize string' => [
+                'value' => serialize('test'),
+                'expected' => 'test',
+                'serialize' => false
+            ],
+            // Boolean as string
+            'Unserialize same value boolean as string' => [
+                'value' => 'false',
+                'expected' => 'false',
+                'serialize' => false
+            ],
+            // Random code
+            'Unserialize PHP Code with tags' => [
+                'value' => serialize('<?php echo "test"; ?>'),
+                'expected' => '<?php echo "test"; ?>',
+                'serialize' => false
+            ],
+            // Booleans
+            'Unserialize same value boolean - true' => [
+                'value' => true,
+                'expected' => true,
+                'serialize' => false
+            ],
+            'Unserialize same value boolean - false' => [
+                'value' => false,
+                'expected' => false,
+                'serialize' => false
+            ],
+            'Unserialize same string null' => [
+                'value' => 'null',
+                'expected' => 'null',
+                'serialize' => false
+            ],
+            'Unserialize same string number' => [
+                'value' => '100',
+                'expected' => '100',
+                'serialize' => false
+            ],
+        ];
     }
 }
