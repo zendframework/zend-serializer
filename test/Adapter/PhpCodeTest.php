@@ -9,6 +9,8 @@
 namespace ZendTest\Serializer\Adapter;
 
 use Zend\Serializer;
+use ZendTest\Serializer\TestAsset\Dummy;
+use Zend\Json\Encoder;
 
 /**
  * @covers Zend\Serializer\Adapter\PhpCode
@@ -21,6 +23,36 @@ class PhpCodeTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->adapter = new Serializer\Adapter\PhpCode();
+    }
+
+    /**
+     * Test when serializing a PHP object it matches the
+     * encode process
+     *
+     * Unserialize on PHP objects occur on Zend\Json\Encoder::encode
+     */
+    public function testSerializeObject()
+    {
+        $object = new Dummy();
+        $data = $this->adapter->serialize($object);
+
+        $this->assertEquals(Encoder::encode($object), $data);
+    }
+
+    /**
+     * Test when unserializing a PHP object it matches
+     * the the same instance of original class
+     *
+     * Unserialize on PHP objects occur on Zend\Json\Decoder::decode
+     */
+    public function testUnserializeObject()
+    {
+        $expected = new Dummy();
+        $serialized = $this->adapter->serialize($expected);
+
+        $data = $this->adapter->unserialize($serialized);
+
+        $this->assertInstanceOf(get_class($expected), $data);
     }
 
     /**
