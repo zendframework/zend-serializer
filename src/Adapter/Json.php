@@ -45,6 +45,7 @@ class Json extends AbstractAdapter
         if ($this->options === null) {
             $this->options = new JsonOptions();
         }
+
         return $this->options;
     }
 
