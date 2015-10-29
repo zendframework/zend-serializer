@@ -14,6 +14,7 @@ use Zend\Serializer\Exception\ExtensionNotLoadedException;
 
 /**
  * @group      Zend_Serializer
+ * @covers Zend\Serializer\Adapter\IgBinary
  */
 class IgBinaryTest extends \PHPUnit_Framework_TestCase
 {

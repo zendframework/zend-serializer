@@ -16,6 +16,7 @@ use Zend\ServiceManager\ServiceManager;
 
 /**
  * @group      Zend_Serializer
+ * @covers Zend\Serializer\Serializer
  */
 class SerializerTest extends \PHPUnit_Framework_TestCase
 {
