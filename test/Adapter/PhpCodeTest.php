@@ -35,6 +35,17 @@ class PhpCodeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(var_export($object, true), $data);
     }
 
+    /* TODO: PHP Fatal error:  Call to undefined method stdClass::__set_state()
+        public function testUnserializeObject()
+        {
+            $value    = "stdClass::__set_state(array(\n))";
+            $expected = new stdClass();
+
+            $data = $this->adapter->unserialize($value);
+            $this->assertEquals($expected, $data);
+        }
+    */
+
     /**
      * @dataProvider serializedValuesProvider
      */
