@@ -9,8 +9,5 @@
 
 namespace ZendTest\Serializer\TestAsset;
 
-class Dummy {
-
-    public $test = '1';
-
-}
+class Dummy
+{}
