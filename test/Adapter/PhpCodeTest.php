@@ -10,7 +10,6 @@ namespace ZendTest\Serializer\Adapter;
 
 use Zend\Serializer;
 use ZendTest\Serializer\TestAsset\Dummy;
-use Zend\Json\Encoder;
 
 /**
  * @covers Zend\Serializer\Adapter\PhpCode
