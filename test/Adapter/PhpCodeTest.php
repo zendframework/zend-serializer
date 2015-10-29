@@ -6,19 +6,18 @@
  * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
-
 namespace ZendTest\Serializer\Adapter;
 
 use Zend\Serializer;
+use ZendTest\Serializer\TestAsset\Dummy;
+use Zend\Json\Encoder;
 
 /**
- * @group      Zend_Serializer
+ * @covers Zend\Serializer\Adapter\PhpCode
  */
 class PhpCodeTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Serializer\Adapter\PhpCode
-     */
+    /** @var Serializer\Adapter\PhpCode */
     private $adapter;
 
     public function setUp()
@@ -26,102 +25,54 @@ class PhpCodeTest extends \PHPUnit_Framework_TestCase
         $this->adapter = new Serializer\Adapter\PhpCode();
     }
 
-    public function tearDown()
-    {
-        $this->adapter = null;
-    }
-
-    public function testSerializeString()
-    {
-        $value    = 'test';
-        $expected = "'test'";
-
-        $data = $this->adapter->serialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-    public function testSerializeFalse()
-    {
-        $value    = false;
-        $expected = 'false';
-
-        $data = $this->adapter->serialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-    public function testSerializeNull()
-    {
-        $value    = null;
-        $expected = 'NULL';
-
-        $data = $this->adapter->serialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-    public function testSerializeNumeric()
-    {
-        $value    = 100.12345;
-        $expected = '100.12345';
-
-        $data = $this->adapter->serialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
+    /**
+     * Test when serializing a PHP object
+     */
     public function testSerializeObject()
     {
-        $value    = new \stdClass();
-        $expected = "stdClass::__set_state(array(\n))";
+        $object = new Dummy();
+        $data = $this->adapter->serialize($object);
 
-        $data = $this->adapter->serialize($value);
-        $this->assertEquals($expected, $data);
+        $this->assertEquals(var_export($object, true), $data);
     }
 
-    public function testUnserializeString()
+    /**
+     * @dataProvider serializedValuesProvider
+     */
+    public function testSerialize($unserialized, $serialized)
     {
-        $value    = "'test'";
-        $expected = 'test';
-
-        $data = $this->adapter->unserialize($value);
-        $this->assertEquals($expected, $data);
+        $this->assertEquals($serialized, $this->adapter->serialize($unserialized));
     }
 
-    public function testUnserializeFalse()
+    /**
+     * @dataProvider serializedValuesProvider
+     */
+    public function testUnserialize($unserialized, $serialized)
     {
-        $value    = 'false';
-        $expected = false;
-
-        $data = $this->adapter->unserialize($value);
-        $this->assertEquals($expected, $data);
+        $this->assertEquals($unserialized, $this->adapter->unserialize($serialized));
     }
 
-    public function testUnserializeNull()
+    public function serializedValuesProvider()
     {
-        $value    = 'NULL';
-        $expected = null;
+        return [
+            // Description => [unserialized, serialized]
+            'String' => ['test', var_export('test', true)],
+            'true' => [true, var_export(true, true)],
+            'false' => [false, var_export(false, true)],
+            'null' => [null, var_export(null, true)],
+            'int' => [1, var_export(1, true)],
+            'float' => [1.2, var_export(1.2, true)],
 
-        $data = $this->adapter->unserialize($value);
-        $this->assertEquals($expected, $data);
+            // Boolean as string
+            '"true"' => ['true', var_export('true', true)],
+            '"false"' => ['false', var_export('false', true)],
+            '"null"' => ['null', var_export('null', true)],
+            '"1"' => ['1', var_export('1', true)],
+            '"1.2"' => ['1.2', var_export('1.2', true)],
+
+            'PHP Code with tags' => ['<?php echo "test"; ?>', var_export('<?php echo "test"; ?>', true)]
+        ];
     }
-
-    public function testUnserializeNumeric()
-    {
-        $value    = '100';
-        $expected = 100;
-
-        $data = $this->adapter->unserialize($value);
-        $this->assertEquals($expected, $data);
-    }
-
-/* TODO: PHP Fatal error:  Call to undefined method stdClass::__set_state()
-    public function testUnserializeObject()
-    {
-        $value    = "stdClass::__set_state(array(\n))";
-        $expected = new stdClass();
-
-        $data = $this->adapter->unserialize($value);
-        $this->assertEquals($expected, $data);
-    }
-*/
 
     public function testUnserializeInvalid()
     {
