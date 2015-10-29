@@ -13,6 +13,7 @@ use Zend\Serializer;
 
 /**
  * @group      Zend_Serializer
+ * @covers Zend\Serializer\Adapter\PythonPickle
  */
 class PythonPickleUnserializeTest extends \PHPUnit_Framework_TestCase
 {
