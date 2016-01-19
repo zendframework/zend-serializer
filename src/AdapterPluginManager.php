@@ -11,6 +11,7 @@ namespace Zend\Serializer;
 
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\Factory\InvokableFactory;
+use Zend\ServiceManager\Exception\InvalidServiceException;
 
 /**
  * Plugin manager implementation for serializer adapters.
@@ -39,14 +40,54 @@ class AdapterPluginManager extends AbstractPluginManager
     ];
 
     protected $factories = [
-        Adapter\IgBinary::class     => InvokableFactory::class,
-        Adapter\Json::class         => InvokableFactory::class,
-        Adapter\MsgPack::class      => InvokableFactory::class,
-        Adapter\PhpCode::class      => InvokableFactory::class,
-        Adapter\PhpSerialize::class => InvokableFactory::class,
-        Adapter\PythonPickle::class => InvokableFactory::class,
-        Adapter\Wddx::class         => InvokableFactory::class
+        Adapter\IgBinary::class             => InvokableFactory::class,
+        'zendserializeradapterigbinary'     => InvokableFactory::class,
+        Adapter\Json::class                 => InvokableFactory::class,
+        'zendserializeradapterjson'         => InvokableFactory::class,
+        Adapter\MsgPack::class              => InvokableFactory::class,
+        'zendserializeradaptermsgpack'      => InvokableFactory::class,
+        Adapter\PhpCode::class              => InvokableFactory::class,
+        'zendserializeradapter\phpcode'     => InvokableFactory::class,
+        Adapter\PhpSerialize::class         => InvokableFactory::class,
+        'zendserializeradapterphpserialize' => InvokableFactory::class,
+        Adapter\PythonPickle::class         => InvokableFactory::class,
+        'zendserializeradapterpythonpickle' => InvokableFactory::class,
+        Adapter\Wddx::class                 => InvokableFactory::class,
+        'zendserializeradapterwddx'         => InvokableFactory::class
     ];
 
     protected $instanceOf = Adapter\AdapterInterface::class;
+
+    /**
+     * Validate the plugin is of the expected type (v3).
+     *
+     * Validates against `$instanceOf`.
+     *
+     * @param mixed $instance
+     * @throws InvalidServiceException
+     */
+    public function validate($instance)
+    {
+        if (! $instance instanceof $this->instanceOf) {
+            throw new InvalidServiceException(sprintf(
+                '%s can only create instances of %s; %s is invalid',
+                get_class($this),
+                $this->instanceOf,
+                (is_object($instance) ? get_class($instance) : gettype($instance))
+            ));
+        }
+    }
+
+    /**
+     * Validate the plugin is of the expected type (v2).
+     *
+     * Proxies to `validate()`.
+     *
+     * @param mixed $instance
+     * @throws InvalidServiceException
+     */
+    public function validatePlugin($instance)
+    {
+        $this->validate($instance);
+    }
 }
