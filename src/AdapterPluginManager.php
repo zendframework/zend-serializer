@@ -41,7 +41,7 @@ class AdapterPluginManager extends AbstractPluginManager
         'pythonPickle' => Adapter\PythonPickle::class,
         'PythonPickle' => Adapter\PythonPickle::class,
         'wddx'         => Adapter\Wddx::class,
-        'Wddx'         => Adapter\Wddx::class
+        'Wddx'         => Adapter\Wddx::class,
     ];
 
     protected $factories = [
@@ -52,6 +52,16 @@ class AdapterPluginManager extends AbstractPluginManager
         Adapter\PhpSerialize::class => InvokableFactory::class,
         Adapter\PythonPickle::class => InvokableFactory::class,
         Adapter\Wddx::class         => InvokableFactory::class,
+        // Legacy (v2) due to alias resolution; canonical form of resolved
+        // alias is used to look up the factory, while the non-normalized
+        // resolved alias is used as the requested name passed to the factory.
+        'zendserializeradapterigbinary' => InvokableFactory::class,
+        'zendserializeradapterjson' => InvokableFactory::class,
+        'zendserializeradaptermsgpack' => InvokableFactory::class,
+        'zendserializeradapterphpcode' => InvokableFactory::class,
+        'zendserializeradapterphpserialize' => InvokableFactory::class,
+        'zendserializeradapterpythonpickle' => InvokableFactory::class,
+        'zendserializeradapterwddx' => InvokableFactory::class,
     ];
 
     protected $instanceOf = Adapter\AdapterInterface::class;
