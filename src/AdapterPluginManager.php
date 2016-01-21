@@ -24,36 +24,44 @@ class AdapterPluginManager extends AbstractPluginManager
 {
     protected $aliases = [
         'igbinary'     => Adapter\IgBinary::class,
+        'igBinary'     => Adapter\IgBinary::class,
         'IgBinary'     => Adapter\IgBinary::class,
         'json'         => Adapter\Json::class,
         'Json'         => Adapter\Json::class,
         'msgpack'      => Adapter\MsgPack::class,
+        'msgPack'      => Adapter\MsgPack::class,
         'MsgPack'      => Adapter\MsgPack::class,
         'phpcode'      => Adapter\PhpCode::class,
+        'phpCode'      => Adapter\PhpCode::class,
         'PhpCode'      => Adapter\PhpCode::class,
         'phpserialize' => Adapter\PhpSerialize::class,
+        'phpSerialize' => Adapter\PhpSerialize::class,
         'PhpSerialize' => Adapter\PhpSerialize::class,
         'pythonpickle' => Adapter\PythonPickle::class,
+        'pythonPickle' => Adapter\PythonPickle::class,
         'PythonPickle' => Adapter\PythonPickle::class,
         'wddx'         => Adapter\Wddx::class,
-        'Wddx'         => Adapter\Wddx::class
+        'Wddx'         => Adapter\Wddx::class,
     ];
 
     protected $factories = [
-        Adapter\IgBinary::class             => InvokableFactory::class,
-        'zendserializeradapterigbinary'     => InvokableFactory::class,
-        Adapter\Json::class                 => InvokableFactory::class,
-        'zendserializeradapterjson'         => InvokableFactory::class,
-        Adapter\MsgPack::class              => InvokableFactory::class,
-        'zendserializeradaptermsgpack'      => InvokableFactory::class,
-        Adapter\PhpCode::class              => InvokableFactory::class,
-        'zendserializeradapter\phpcode'     => InvokableFactory::class,
-        Adapter\PhpSerialize::class         => InvokableFactory::class,
+        Adapter\IgBinary::class     => InvokableFactory::class,
+        Adapter\Json::class         => InvokableFactory::class,
+        Adapter\MsgPack::class      => InvokableFactory::class,
+        Adapter\PhpCode::class      => InvokableFactory::class,
+        Adapter\PhpSerialize::class => InvokableFactory::class,
+        Adapter\PythonPickle::class => InvokableFactory::class,
+        Adapter\Wddx::class         => InvokableFactory::class,
+        // Legacy (v2) due to alias resolution; canonical form of resolved
+        // alias is used to look up the factory, while the non-normalized
+        // resolved alias is used as the requested name passed to the factory.
+        'zendserializeradapterigbinary' => InvokableFactory::class,
+        'zendserializeradapterjson' => InvokableFactory::class,
+        'zendserializeradaptermsgpack' => InvokableFactory::class,
+        'zendserializeradapterphpcode' => InvokableFactory::class,
         'zendserializeradapterphpserialize' => InvokableFactory::class,
-        Adapter\PythonPickle::class         => InvokableFactory::class,
         'zendserializeradapterpythonpickle' => InvokableFactory::class,
-        Adapter\Wddx::class                 => InvokableFactory::class,
-        'zendserializeradapterwddx'         => InvokableFactory::class
+        'zendserializeradapterwddx' => InvokableFactory::class,
     ];
 
     protected $instanceOf = Adapter\AdapterInterface::class;
