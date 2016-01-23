@@ -64,8 +64,8 @@ class PhpSerialize extends AbstractAdapter
      */
     public function unserialize($serialized)
     {
-        if (!is_string($serialized) || !preg_match('/^((s|i|d|b|a|O|C):|N;)/', $serialized)) {
-            return $serialized;
+        if (!is_string($serialized)) {
+            throw new Exception\RuntimeException('Serialized data must be a string');
         }
 
         // If we have a serialized boolean false value, just return false;
