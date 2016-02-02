@@ -92,10 +92,14 @@ class AdapterPluginManager extends AbstractPluginManager
      * Proxies to `validate()`.
      *
      * @param mixed $instance
-     * @throws InvalidServiceException
+     * @throws Exception\RuntimeException
      */
     public function validatePlugin($instance)
     {
-        $this->validate($instance);
+        try {
+            $this->validate($instance);
+        } catch (InvalidServiceException $e) {
+            throw new Exception\RuntimeException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 }
