@@ -11,7 +11,9 @@ namespace ZendTest\Serializer;
 
 use Zend\Serializer\Adapter;
 use Zend\Serializer\AdapterPluginManager;
+use Zend\Serializer\Exception\RuntimeException;
 use Zend\Serializer\Serializer;
+use Zend\ServiceManager\Exception\InvalidServiceException;
 use Zend\ServiceManager\ServiceManager;
 
 /**
@@ -69,8 +71,17 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
         Serializer::setAdapterPluginManager($adapters);
-        $this->setExpectedException('Zend\ServiceManager\Exception\InvalidServiceException', 'AdapterInterface');
-        Serializer::factory('dummy');
+
+        try {
+            Serializer::factory('dummy');
+            $this->fail('Expected exception when requesting invalid adapter type');
+        } catch (InvalidServiceException $e) {
+            $this->assertContains('Dummy is invalid', $e->getMessage());
+        } catch (RuntimeException $e) {
+            $this->assertContains('Dummy is invalid', $e->getMessage());
+        } catch (\Exception $e) {
+            $this->fail('Unexpected exception raised by plugin manager for invalid adapter type');
+        }
     }
 
     public function testChangeDefaultAdapterWithString()
