@@ -14,6 +14,7 @@ use Zend\Serializer\Exception\ExtensionNotLoadedException;
 
 /**
  * @group      Zend_Serializer
+ * @covers Zend\Serializer\Adapter\MsgPack
  */
 class MsgPackTest extends \PHPUnit_Framework_TestCase
 {

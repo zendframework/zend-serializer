@@ -14,6 +14,7 @@ use Zend\Serializer\Exception\ExtensionNotLoadedException;
 
 /**
  * @group      Zend_Serializer
+ * @covers Zend\Serializer\Adapter\Wddx
  */
 class WddxTest extends \PHPUnit_Framework_TestCase
 {

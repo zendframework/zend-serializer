@@ -11,10 +11,14 @@ namespace ZendTest\Serializer;
 
 use Zend\Serializer\Adapter;
 use Zend\Serializer\AdapterPluginManager;
+use Zend\Serializer\Exception\RuntimeException;
 use Zend\Serializer\Serializer;
+use Zend\ServiceManager\Exception\InvalidServiceException;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * @group      Zend_Serializer
+ * @covers Zend\Serializer\Serializer
  */
 class SerializerTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,7 +38,9 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
 
     public function testChangeAdapterPluginManager()
     {
-        $newPluginManager = new AdapterPluginManager();
+        $newPluginManager = new AdapterPluginManager(
+            $this->getMockBuilder('Interop\Container\ContainerInterface')->getMock()
+        );
         Serializer::setAdapterPluginManager($newPluginManager);
         $this->assertSame($newPluginManager, Serializer::getAdapterPluginManager());
     }
@@ -59,11 +65,23 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
 
     public function testFactoryOnADummyClassAdapter()
     {
-        $adapters = new AdapterPluginManager();
-        $adapters->setInvokableClass('dummy', 'ZendTest\Serializer\TestAsset\Dummy');
+        $adapters = new AdapterPluginManager(new ServiceManager, [
+            'invokables' => [
+                'dummy' => TestAsset\Dummy::class
+            ]
+        ]);
         Serializer::setAdapterPluginManager($adapters);
-        $this->setExpectedException('Zend\\Serializer\\Exception\\RuntimeException', 'AdapterInterface');
-        Serializer::factory('dummy');
+
+        try {
+            Serializer::factory('dummy');
+            $this->fail('Expected exception when requesting invalid adapter type');
+        } catch (InvalidServiceException $e) {
+            $this->assertContains('Dummy is invalid', $e->getMessage());
+        } catch (RuntimeException $e) {
+            $this->assertContains('Dummy is invalid', $e->getMessage());
+        } catch (\Exception $e) {
+            $this->fail('Unexpected exception raised by plugin manager for invalid adapter type');
+        }
     }
 
     public function testChangeDefaultAdapterWithString()
@@ -84,7 +102,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
     {
         $options = new Adapter\PythonPickleOptions(['protocol' => 2]);
         /** @var Adapter\PythonPickle $adapter  */
-        $adapter = Serializer::factory('pythonpickle', $options);
+        $adapter = Serializer::factory('pythonpickle', $options->toArray());
         $this->assertInstanceOf('Zend\Serializer\Adapter\PythonPickle', $adapter);
         $this->assertEquals(2, $adapter->getOptions()->getProtocol());
     }

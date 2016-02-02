@@ -13,6 +13,7 @@ use Zend\Serializer;
 
 /**
  * @group      Zend_Serializer
+ * @covers Zend\Serializer\Adapter\Json
  */
 class JsonTest extends \PHPUnit_Framework_TestCase
 {
