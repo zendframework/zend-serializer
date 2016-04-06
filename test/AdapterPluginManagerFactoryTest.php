@@ -56,6 +56,8 @@ class AdapterPluginManagerFactoryTest extends TestCase
     public function testFactoryConfiguresPluginManagerUnderServiceManagerV2()
     {
         $container = $this->prophesize(ServiceLocatorInterface::class);
+        $container->willImplement(ContainerInterface::class);
+
         $serializer = $this->prophesize(AdapterInterface::class)->reveal();
 
         $factory = new AdapterPluginManagerFactory();
