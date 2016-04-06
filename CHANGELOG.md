@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.7.0 - TBD
+
+### Added
+
+- [#14](https://github.com/zendframework/zend-serializer/pull/14) exposes the
+  package as a ZF component and/or generic configuration provider, by adding the
+  following:
+  - `AdapterPluginManagerFactory`, which can be consumed by container-interop /
+    zend-servicemanager to create and return a `AdapterPluginManager` instance.
+  - `ConfigProvider`, which maps the service `SerializerAdapterManager` to the above
+    factory.
+  - `Module`, which does the same as `ConfigProvider`, but specifically for
+    zend-mvc applications. It also provices a specification to
+    `Zend\ModuleManager\Listener\ServiceListener` to allow modules to provide
+    serializer configuration.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
 ## 2.6.2 - TBD
 
 ### Added
