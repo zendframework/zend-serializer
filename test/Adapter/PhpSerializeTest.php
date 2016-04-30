@@ -122,15 +122,19 @@ class PhpSerializeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $data);
     }
 
-    public function testUnserializingNonserializedStringReturnsItVerbatim()
+    public function testUnserializingNoStringRaisesException()
     {
-        $value = 'not a serialized string';
-        $this->assertEquals($value, $this->adapter->unserialize($value));
+        $value = null;
+        $this->setExpectedException(
+            'Zend\Serializer\Exception\RuntimeException',
+            'Serialized data must be a string'
+        );
+        $this->adapter->unserialize($value);
     }
 
     public function testUnserializingInvalidStringRaisesException()
     {
-        $value = 'a:foobar';
+        $value = 'foobar';
         $this->setExpectedException('Zend\Serializer\Exception\RuntimeException');
         $this->adapter->unserialize($value);
     }
