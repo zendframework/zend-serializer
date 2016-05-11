@@ -14,7 +14,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- [#16](https://github.com/zendframework/zend-serializer/pull/16) removes the
+  dependency on zend-math, making it optional. (This was done as the requirement
+  is only when using the `PythonPickle` adapter.)
 
 ### Fixed
 
