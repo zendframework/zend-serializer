@@ -16,10 +16,10 @@ cache:
 env:
   global:
     - COMPOSER_ARGS="--no-interaction --ignore-platform-reqs"
-    - SITE_URL: https://zendframework.github.io/zend-memory
+    - SITE_URL: https://zendframework.github.io/zend-serializer
     - GH_USER_NAME: "Matthew Weier O'Phinney"
     - GH_USER_EMAIL: matthew@weierophinney.net
-    - GH_REF: github.com/zendframework/zend-memory.git
+    - GH_REF: github.com/zendframework/zend-serializer.git
     - secure: "Eus59mQXnKuHFWh7olBeAoc3e2AHp9z2IvJuZx6zcLO1HBu7+iTXhZL74jwbFW3h6g+2jgIyLIr81aGNLwpxQfZKhWRMM2O8kQIMnz+svRh2RC30zs2bcuDyoHr086lQEcOXMGcnMl52X00DIr4jMj7sJ1gVe+g9aZpoU4Qq/4J2d+bKKnN802e+NBzsgIhY+NUmffZpb5s/RWejhR2HCbyfQrsNEEmXO/qHOwJNxlD4bG1ckXDtidFBepfEJT+/sbJkrkNTibOoxjyZyfADt8YOujktEyYBAgoCf5cv/Erw0lQO5lwnXI8O6Cp86x9zJtxo2Vm6RkIa5fUR6qb/Difta58OXHzXJsCrPTfTiV/SKWr31Rfsd3HlJhwd3aogsF5VBBGKrNKZ+avXbuq++QThXwkE+XUmxKHsbFpct7q+AP1CkOUefEKu/AayHnJulUpiL4JzG/BvjSC8rVAUlsXf51gVL/rTVjqbR5YCmoxGBSORHl4WFgOmq9D2T4TKEhGgsQBF9IB3N6VVc0TE+S5XVSwkHdd1d76VpasYeNO3UNEstfc+R0kWYGpmXVmvubBLX3i/Zv/k0LwfEaSUl06MK+Xnc0twx8da8cd7WDChP1YAfJn531msQjgjWtz+c3E3EiFExILvOnPotEj+S0tEU/GPVXkiQKiJwojWozI="
 
 matrix:
