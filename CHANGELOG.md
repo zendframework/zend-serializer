@@ -36,7 +36,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#9](https://github.com/zendframework/zend-serializer/pull/9) fixes the
+  behavior of the `PhpSerialize` adapter to raise an exception during
+  deserialization if the value is not serialized, restoring behavior to match
+  the other adapters.
 
 ## 2.7.1 - 2016-04-18
 
