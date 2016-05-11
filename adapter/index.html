@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <link rel="shortcut icon" href="../img/favicon.ico">
+
+    <title>Adapters - zend-serializer</title>
+
+    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.018/css/hack.min.css">
+    <link href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href="../css/base.css" rel="stylesheet">
+    <link href="../css/zf.css" rel="stylesheet">
+    <link href="../css/prism-zf.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+    <script>
+    WebFont.load({
+        google: {
+            families: ['Open Sans', 'PT Sans']
+        }
+    });
+    </script>
+
+    
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <span class="navbar-brand">
+              <a class="logo-link" href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Zend Framework"><img src="../img/zf-logo-mark.png" height="28" alt="Zend Framework" /></a>
+              <a href="..">zend-serializer</a>
+            </span>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../intro/">Intro</a>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="./">Adapters</a>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" class="component-toggle" data-toggle="tooltip" data-placement="bottom" title="Show component list">
+                        <i class="fa fa-book"></i> Components
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li>
+                        <a href="https://github.com/zendframework/zend-serializer">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <!-- content:begin -->
+    <div class="container">
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#adapters">Adapters</a></li>
+        
+            <li><a href="#the-phpserialize-adapter">The PhpSerialize Adapter</a></li>
+        
+            <li><a href="#the-igbinary-adapter">The IgBinary Adapter</a></li>
+        
+            <li><a href="#the-wddx-adapter">The Wddx Adapter</a></li>
+        
+            <li><a href="#the-json-adapter">The Json Adapter</a></li>
+        
+            <li><a href="#the-pythonpickle-adapter">The PythonPickle Adapter</a></li>
+        
+            <li><a href="#the-phpcode-adapter">The PhpCode Adapter</a></li>
+        
+    
+    </ul>
+
+    
+    <ul class="pager hidden-print">
+      <li class="previous">
+        <a rel="prev" href="../intro/"><i class="fa fa-arrow-left"></i> Previous</a>
+      </li>
+      <li class="next disabled ">
+        <a rel="next" >Next <i class="fa fa-arrow-right"></i></a>
+      </li>
+    </ul>
+    
+</div></div>
+        <div class="col-md-9" role="main">
+
+<ol class="breadcrumb" role="navigation" aria-label="breadcrumbs navigation">
+  <li><a href="..">Docs</a> &raquo;</li>
+  
+    
+  
+  <li class="active">Adapters</li>
+</ol>
+
+<h1 id="adapters">Adapters</h1>
+<p>zend-serializer adapters handle serialization to and deserialization from
+specific representations.</p>
+<p>Each adapter has its own strengths. In some cases, not every PHP datatype (e.g.,
+objects) can be converted to a string representation. In most such cases, the
+type will be converted to a similar type that is serializable.</p>
+<p>As an example, PHP objects will often be cast to arrays. If this fails, a
+<code>Zend\Serializer\Exception\ExceptionInterface</code> will be thrown.</p>
+<h2 id="the-phpserialize-adapter">The PhpSerialize Adapter</h2>
+<p>The <code>Zend\Serializer\Adapter\PhpSerialize</code> adapter uses the built-in
+<a href="http://php.net/serialize">serialize()</a>/<a href="http://php.net/unserialize">unserialize()</a>
+functions, and is a good default adapter choice.</p>
+<p>There are no configurable options for this adapter.</p>
+<h2 id="the-igbinary-adapter">The IgBinary Adapter</h2>
+<p><a href="http://pecl.php.net/package/igbinary">Igbinary</a> was originally released by
+Sulake Dynamoid Oy and since 2011-03-14 moved to <a href="http://pecl.php.net">PECL</a> and
+maintained by Pierre Joye. It's a drop-in replacement for the standard PHP
+serializer. Instead of using a costly textual representation, igbinary stores
+PHP data structures in a compact binary form. Savings are significant when using
+memcached or similar memory based storages for serialized data.</p>
+<p>You need the igbinary PHP extension installed on your system in order to use
+this adapter.</p>
+<p>There are no configurable options for this adapter.</p>
+<h2 id="the-wddx-adapter">The Wddx Adapter</h2>
+<p><a href="http://wikipedia.org/wiki/WDDX">WDDX</a> (Web Distributed Data eXchange) is a
+programming-language-, platform-, and transport-neutral data interchange
+mechanism for passing data between different environments and different
+computers.</p>
+<p>The adapter uses the <a href="http://php.net/wddx">wddx</a> PHP functions. Please read the
+PHP manual to determine how you may enable them in your installation.</p>
+<p>Additionally, the <a href="http://php.net/simplexml">SimpleXML</a> extension is used to
+check if a returned <code>NULL</code> value from <code>wddx_unserialize()</code> is based on a
+serialized <code>NULL</code> or on invalid data.</p>
+<p>Available options include:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>comment</td>
+<td><code>string</code></td>
+<td></td>
+<td>An optional comment that appears in the packet header.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-json-adapter">The Json Adapter</h2>
+<p>The <a href="http://wikipedia.org/wiki/JavaScript_Object_Notation">JSON</a> adapter provides a bridge to the
+<a href="https://zendframework.github.io/zend-json">zend-json</a> component.</p>
+<p>Available options include:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Data Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cycle_check</code></td>
+<td><code>boolean</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>object_decode_type</code></td>
+<td><code>Zend\Json\Json::TYPE_*</code></td>
+<td><code>Zend\Json\Json::TYPE_ARRAY</code></td>
+</tr>
+<tr>
+<td><code>enable_json_expr_finder</code></td>
+<td><code>boolean</code></td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-pythonpickle-adapter">The PythonPickle Adapter</h2>
+<p>This adapter converts PHP types to a <a href="http://docs.python.org/library/pickle.html">Python Pickle</a>
+string representation. With it, you can read the serialized data with Python and
+read Pickled data from Python with PHP.</p>
+<p>This adapter requires the <a href="https://zendframework.github.io/zend-math/">zend-math</a> component:</p>
+<pre class="codehilite"><code class="language-bash">$ composer require zendframework/zend-math</code></pre>
+
+
+<p>Available options include:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>protocol</td>
+<td><code>integer</code> (0/1/2/3)</td>
+<td>0</td>
+<td>The Pickle protocol version used on serialize</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="datatype-merging-php-to-python-pickle">Datatype merging (PHP to Python Pickle)</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>PHP Type</th>
+<th>Python Pickle Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NULL</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>boolean</code></td>
+<td><code>boolean</code></td>
+</tr>
+<tr>
+<td><code>integer</code></td>
+<td><code>integer</code></td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td><code>float</code></td>
+</tr>
+<tr>
+<td><code>string</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td><code>array</code> list</td>
+<td><code>list</code></td>
+</tr>
+<tr>
+<td><code>array</code> map</td>
+<td><code>dictionary</code></td>
+</tr>
+<tr>
+<td><code>object</code></td>
+<td><code>dictionary</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="datatype-merging-python-pickle-to-php">Datatype merging (Python Pickle to PHP)</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Python Pickle Type</th>
+<th>PHP Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>None</code></td>
+<td><code>NULL</code></td>
+</tr>
+<tr>
+<td><code>boolean</code></td>
+<td><code>boolean</code></td>
+</tr>
+<tr>
+<td><code>integer</code></td>
+<td><code>integer</code></td>
+</tr>
+<tr>
+<td><code>long</code></td>
+<td><code>integer</code>, <code>float</code>, <code>string</code>, or <code>Zend\Serializer\Exception\ExceptionInterface</code></td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td><code>float</code></td>
+</tr>
+<tr>
+<td><code>string</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td><code>bytes</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td><code>unicode string</code></td>
+<td><code>string</code> UTF-8</td>
+</tr>
+<tr>
+<td><code>list</code></td>
+<td><code>array</code> list</td>
+</tr>
+<tr>
+<td><code>tuple</code></td>
+<td><code>array</code> list</td>
+</tr>
+<tr>
+<td><code>dictionary</code></td>
+<td><code>array</code> map</td>
+</tr>
+<tr>
+<td>All other types</td>
+<td><code>Zend\Serializer\Exception\ExceptionInterface</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-phpcode-adapter">The PhpCode Adapter</h2>
+<p>The <code>Zend\Serializer\Adapter\PhpCode</code> adapter generates a parsable PHP code
+representation using <a href="http://php.net/var_export">var_export()</a>. To restore,
+the data will be executed using <a href="http://php.net/eval">eval</a>.</p>
+<p>There are no configuration options for this adapter.</p>
+<blockquote>
+<h3 id="warning-unserializing-objects">Warning: Unserializing objects</h3>
+<p>Objects will be serialized using the
+<a href="http://php.net/language.oop5.magic#language.oop5.magic.set-state">__set_state</a> magic
+method. If the class doesn't implement this method, a fatal error will occur
+during execution.</p>
+<h3 id="warning-uses-eval">Warning: Uses eval()</h3>
+<p>The <code>PhpCode</code> adapter utilizes <code>eval()</code> to unserialize. This introduces both a
+performance and potential security issue as a new process will be executed.
+Typically, you should use the <code>PhpSerialize</code> adapter unless you require
+human-readability of the serialized data.</p>
+</blockquote>
+
+<hr />
+
+
+<nav>
+  <ul class="pager hidden-print">
+    <li class="previous">
+      <a rel="prev" href="../intro/"><i class="fa fa-arrow-left"></i> Previous</a>
+    </li>
+    <li class="next disabled ">
+      <a rel="next" >Next <i class="fa fa-arrow-right"></i></a>
+    </li>
+  </ul>
+</nav>
+</div>
+        
+    </div>
+    <!-- content:end -->
+
+    <footer class="col-md-12 text-center">
+        <hr>
+        <p>
+        <small>Copyright (c) 2016 <a href="http://www.zend.com/">Zend Technologies USA Inc.</a><br></small>
+        </p>
+        <p><small><a href="http://framework.zend.com">Learn more about Zend Framework</a></small></p>
+    </footer>
+
+    <script src="../js/jquery-1.10.2.min.js"></script>
+    <script src="../js/bootstrap-3.0.3.min.js"></script>
+    <script src="../js/prism-zf.js"></script>
+
+    <script>var base_url = '..';</script>
+    <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+    <script src="../js/base.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        From here you can search these documents. Enter your search terms below.
+                    </p>
+                    <form role="form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        </div>
+                    </form>
+                    <div id="mkdocs-search-results"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="zf-components">
+  <div class="zf-components-grid">
+    <div class="zf-logo">
+      <a href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Go to the ZF homepage"><img src="../img/zf-logo-mark.png" alt="Zend Framework" width="250" /></a>
+    </div>
+
+    <div class="component-list"></div>
+
+    <p class="zf-components-rollup"><a href="#">Hide list</a></p>
+  </div>
+</div>
+
+    <script>
+  // Prepare the component list dropdown for display
+  $(function () {
+    var components = $(".zf-components"),
+        componentList = components.find(".component-list"),
+        sidebar = $(".bs-sidebar.affix"),
+        sidebarInitialPos = sidebar.css("position"),
+        hidden,
+        componentToggle = $(".component-toggle"),
+        navbar = $(".navbar-fixed-top"),
+        rollUpLink = $(".zf-components-rollup a");
+
+    // Initial setup on document load
+    components.insertBefore(navbar);
+    $(".zf-logo a").tooltip();
+    componentToggle.tooltip();
+    rollUpLink.attr({ href: "#", alt: "Hide component list" });
+
+    // Cast initial sidebar position value
+    if (undefined === sidebarInitialPos) {
+      sidebarInitialPos = "fixed";
+    }
+
+    // Setup onclick events to toggle list
+    componentToggle.click(toggleComponentList);
+    rollUpLink.click(toggleComponentList);
+
+    // Toggle the component list display
+    function toggleComponentList(event) {
+      event.preventDefault();
+
+      if (hidden === undefined) {
+        // Not loaded yet; load and display.
+        loadComponentList();
+        return;
+      }
+
+      if (hidden) {
+        // Hidden; display.
+        showComponentList();
+        return;
+      }
+
+      // Currently visible; hide
+      hideComponentList();
+    }
+
+    // Show the component list
+    function showComponentList() {
+      navbar.css({position: "relative"});
+      sidebar.css({position: "relative"});
+      components
+        .css({"margin-top": "-" + components.outerHeight() + "px"})
+        .show()
+        .animate({"margin-top": 0}, {
+          complete: function () {
+            componentToggle
+              .data("placement", "top")
+              .attr("data-original-title", "Hide component list");
+            hidden = false;
+          },
+          queue: false
+        });
+    }
+
+    // Hide the component list
+    function hideComponentList() {
+      components.animate({"margin-top": "-" + components.outerHeight() + "px"}, {
+        complete: function () {
+          navbar.css({position: "fixed"});
+          sidebar.css({position: sidebarInitialPos});
+          componentToggle
+            .data("placement", "bottom")
+            .attr("data-original-title", "Show component list");
+          components.hide();
+          hidden = true;
+        },
+        queue: false
+      });
+      sidebar.animate({ top: sidebarInitialTop + "px" }, { queue: false});
+    }
+
+    // Inject a component into the componet list DOM.
+    function injectComponent(index, component) {
+      componentList.append('<div class="component"><h4><a href="' + component.url + '">' + component.name + '</a></h4><p>' + component.description + '</p></div>');
+    }
+
+    // Parse the component list, build the DOM, and display it.
+    function parseComponentList(components) {
+      $.each(components, injectComponent);
+      showComponentList();
+    }
+
+    // Fetch the component list and display it.
+    function loadComponentList () {
+      $.ajax({
+        url: "//zendframework.github.io/zf-mkdoc-theme/scripts/zf-component-list.json",
+        dataType: "text json",
+        success: parseComponentList,
+        error: function (e) {
+          console.log("Error occurred with XHR call", e);
+        }
+      });
+    }
+  });
+</script>
+    </body>
+
+</html>
