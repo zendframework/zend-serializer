@@ -122,20 +122,47 @@ class PhpSerializeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $data);
     }
 
-    public function testUnserializingNoStringRaisesException()
+    public function invalidSerializationTypes()
     {
-        $value = null;
+        return [
+            'null'       => [null, 'NULL'],
+            'true'       => [true, 'boolean'],
+            'false'      => [false, 'boolean'],
+            'zero'       => [0, 'int'],
+            'int'        => [1, 'int'],
+            'zero-float' => [0.0, 'double'],
+            'float'      => [1.1, 'double'],
+            'array'      => [['foo'], 'array'],
+            'object'     => [(object) ['foo' => 'bar'], 'stdClass'],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidSerializationTypes
+     */
+    public function testUnserializingNoStringRaisesException($value, $expected)
+    {
         $this->setExpectedException(
             'Zend\Serializer\Exception\RuntimeException',
-            'Serialized data must be a string'
+            $expected
         );
         $this->adapter->unserialize($value);
     }
 
-    public function testUnserializingInvalidStringRaisesException()
+    public function invalidStrings()
     {
-        $value = 'foobar';
-        $this->setExpectedException('Zend\Serializer\Exception\RuntimeException');
-        $this->adapter->unserialize($value);
+        return [
+            'not-serialized'        => ['foobar', 'foobar'],
+            'invalid-serialization' => ['a:foobar', 'Unserialization failed'],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidStrings
+     */
+    public function testUnserializingInvalidStringRaisesException($string, $expected)
+    {
+        $this->setExpectedException(Serializer\Exception\RuntimeException::class, $expected);
+        $this->adapter->unserialize($string);
     }
 }
