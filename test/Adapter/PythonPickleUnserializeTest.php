@@ -356,8 +356,10 @@ class PythonPickleUnserializeTest extends \PHPUnit_Framework_TestCase
     public function testUnserialzeInvalid()
     {
         $value = 'not a serialized string';
-        $this->setExpectedException('Zend\Serializer\Exception\RuntimeException',
-                                    "Invalid or unknown opcode 'n'");
+        $this->setExpectedException(
+            'Zend\Serializer\Exception\RuntimeException',
+            "Invalid or unknown opcode 'n'"
+        );
         $this->adapter->unserialize($value);
     }
 }
