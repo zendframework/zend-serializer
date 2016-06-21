@@ -10,4 +10,5 @@
 namespace ZendTest\Serializer\TestAsset;
 
 class Dummy
-{}
+{
+}
