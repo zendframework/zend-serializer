@@ -110,6 +110,7 @@ class PythonPickleSerializeProtocol1Test extends \PHPUnit_Framework_TestCase
 
     public function testSerializeBinString()
     {
+        // @codingStandardsIgnoreStart
         $value    = "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
                   . "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
                   . "01234567890123456789012345678901234567890123456789012345";
@@ -118,6 +119,7 @@ class PythonPickleSerializeProtocol1Test extends \PHPUnit_Framework_TestCase
                   . "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
                   . "01234567890123456789012345678901234567890123456789012345"
                   . "q\x00.";
+        // @codingStandardsIgnoreEnd
 
         $data = $this->adapter->serialize($value);
         $this->assertEquals($expected, $data);
