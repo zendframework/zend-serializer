@@ -911,7 +911,7 @@ class PythonPickle extends AbstractAdapter
     {
         $nBin = $this->read(4);
         if (static::$isLittleEndian === false) {
-            $nBin = strrev($$nBin);
+            $nBin = strrev($nBin);
         }
         list(, $n) = unpack('l', $nBin);
         $data = $this->read($n);
@@ -984,7 +984,7 @@ class PythonPickle extends AbstractAdapter
         // read byte length
         $nBin = $this->read(4);
         if (static::$isLittleEndian === false) {
-            $nBin = strrev($$nBin);
+            $nBin = strrev($nBin);
         }
         list(, $n)     = unpack('l', $nBin);
         $this->stack[] = $this->read($n);
@@ -1337,9 +1337,10 @@ class PythonPickle extends AbstractAdapter
             if ($this->bigIntegerAdapter === null) {
                 $this->bigIntegerAdapter = BigInteger\BigInteger::getDefaultAdapter();
             }
-            if (static::$isLittleEndian === true) {
-                $data = strrev($data);
-            }
+
+            // bigInt expects binary data as BigEndian
+            $data = strrev($data);
+
             $long = $this->bigIntegerAdapter->binToInt($data, true);
         } else {
             for ($i = 0; $i < $nbytes; $i++) {
