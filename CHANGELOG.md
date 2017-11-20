@@ -36,6 +36,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#27](https://github.com/zendframework/zend-serializer/pull/27)
+  CS fixes for new coding standard
 - [#25](https://github.com/zendframework/zend-serializer/pull/25)
   Travis: Move coverage to latest-env to make composer.lock usefull again
 - [#30](https://github.com/zendframework/zend-serializer/issues/30) 
