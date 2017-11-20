@@ -27,7 +27,7 @@ class Json extends AbstractAdapter
      */
     public function setOptions($options)
     {
-        if (!$options instanceof JsonOptions) {
+        if (! $options instanceof JsonOptions) {
             $options = new JsonOptions($options);
         }
 

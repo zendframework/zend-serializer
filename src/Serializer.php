@@ -96,7 +96,7 @@ abstract class Serializer
      */
     public static function getDefaultAdapter()
     {
-        if (!static::$defaultAdapter instanceof Adapter) {
+        if (! static::$defaultAdapter instanceof Adapter) {
             static::setDefaultAdapter(static::$defaultAdapter);
         }
         return static::$defaultAdapter;
