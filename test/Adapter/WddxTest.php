@@ -25,7 +25,7 @@ class WddxTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (!extension_loaded('wddx')) {
+        if (! extension_loaded('wddx')) {
             try {
                 new Serializer\Adapter\Wddx();
                 $this->fail("Zend\\Serializer\\Adapter\\Wddx needs missing ext/wddx but did't throw exception");
@@ -197,7 +197,7 @@ class WddxTest extends \PHPUnit_Framework_TestCase
 
     public function testUnserializeInvalidXml()
     {
-        if (!class_exists('SimpleXMLElement', false)) {
+        if (! class_exists('SimpleXMLElement', false)) {
             $this->markTestSkipped('Skipped by missing ext/simplexml');
         }
 
@@ -211,7 +211,7 @@ class WddxTest extends \PHPUnit_Framework_TestCase
 
     public function testUnserialzeInvalidWddx()
     {
-        if (!class_exists('SimpleXMLElement', false)) {
+        if (! class_exists('SimpleXMLElement', false)) {
             $this->markTestSkipped('Skipped by missing ext/simplexml');
         }
 

@@ -156,7 +156,7 @@ class PythonPickle extends AbstractAdapter
      */
     public function setOptions($options)
     {
-        if (!$options instanceof PythonPickleOptions) {
+        if (! $options instanceof PythonPickleOptions) {
             $options = new PythonPickleOptions($options);
         }
 
@@ -554,7 +554,7 @@ class PythonPickle extends AbstractAdapter
             $this->load($op);
         }
 
-        if (!count($this->stack)) {
+        if (! count($this->stack)) {
             throw new Exception\RuntimeException('No data found');
         }
 
@@ -719,7 +719,7 @@ class PythonPickle extends AbstractAdapter
         $id = (int) $this->readline();
 
         $lastStack = count($this->stack) - 1;
-        if (!isset($this->stack[$lastStack])) {
+        if (! isset($this->stack[$lastStack])) {
             throw new Exception\RuntimeException('No stack exist');
         }
         $this->memo[$id] =& $this->stack[$lastStack];
@@ -734,8 +734,8 @@ class PythonPickle extends AbstractAdapter
     {
         $id = ord($this->read(1));
 
-        $lastStack = count($this->stack)-1;
-        if (!isset($this->stack[$lastStack])) {
+        $lastStack = count($this->stack) - 1;
+        if (! isset($this->stack[$lastStack])) {
             throw new Exception\RuntimeException('No stack exist');
         }
         $this->memo[$id] =& $this->stack[$lastStack];
@@ -754,8 +754,8 @@ class PythonPickle extends AbstractAdapter
         }
         list(, $id) = unpack('l', $bin);
 
-        $lastStack = count($this->stack)-1;
-        if (!isset($this->stack[$lastStack])) {
+        $lastStack = count($this->stack) - 1;
+        if (! isset($this->stack[$lastStack])) {
             throw new Exception\RuntimeException('No stack exist');
         }
         $this->memo[$id] =& $this->stack[$lastStack];
@@ -770,7 +770,7 @@ class PythonPickle extends AbstractAdapter
     {
         $id = (int) $this->readline();
 
-        if (!array_key_exists($id, $this->memo)) {
+        if (! array_key_exists($id, $this->memo)) {
             throw new Exception\RuntimeException('Get id "' . $id . '" not found in memo');
         }
         $this->stack[] =& $this->memo[$id];
@@ -785,7 +785,7 @@ class PythonPickle extends AbstractAdapter
     {
         $id = ord($this->read(1));
 
-        if (!array_key_exists($id, $this->memo)) {
+        if (! array_key_exists($id, $this->memo)) {
             throw new Exception\RuntimeException('Get id "' . $id . '" not found in memo');
         }
         $this->stack[] =& $this->memo[$id];
@@ -804,7 +804,7 @@ class PythonPickle extends AbstractAdapter
         }
         list(, $id) = unpack('l', $bin);
 
-        if (!array_key_exists($id, $this->memo)) {
+        if (! array_key_exists($id, $this->memo)) {
             throw new Exception\RuntimeException('Get id "' . $id . '" not found in memo');
         }
         $this->stack[] =& $this->memo[$id];
@@ -959,7 +959,7 @@ class PythonPickle extends AbstractAdapter
     protected function loadBinString()
     {
         $bin = $this->read(4);
-        if (!static::$isLittleEndian) {
+        if (! static::$isLittleEndian) {
             $bin = strrev($bin);
         }
         list(, $len)   = unpack('l', $bin);
@@ -1099,9 +1099,9 @@ class PythonPickle extends AbstractAdapter
      */
     protected function loadAppend()
     {
-        $value  =  array_pop($this->stack);
+        $value  = array_pop($this->stack);
         $list   =& $this->stack[count($this->stack) - 1];
-        $list[] =  $value;
+        $list[] = $value;
     }
 
     /**
@@ -1117,9 +1117,9 @@ class PythonPickle extends AbstractAdapter
      */
     protected function loadAppends()
     {
-        $k    =  $this->lastMarker();
+        $k    = $this->lastMarker();
         $list =& $this->stack[$k - 1];
-        $max  =  count($this->stack);
+        $max  = count($this->stack);
         for ($i = $k + 1; $i < $max; $i++) {
             $list[] = $this->stack[$i];
             unset($this->stack[$i]);
@@ -1147,8 +1147,8 @@ class PythonPickle extends AbstractAdapter
      */
     protected function loadSetItem()
     {
-        $value =  array_pop($this->stack);
-        $key   =  array_pop($this->stack);
+        $value = array_pop($this->stack);
+        $key   = array_pop($this->stack);
         $dict  =& $this->stack[count($this->stack) - 1];
         $dict[$key] = $value;
     }
@@ -1166,14 +1166,14 @@ class PythonPickle extends AbstractAdapter
      */
     protected function loadSetItems()
     {
-        $k    =  $this->lastMarker();
+        $k    = $this->lastMarker();
         $dict =& $this->stack[$k - 1];
-        $max  =  count($this->stack);
+        $max  = count($this->stack);
         for ($i = $k + 1; $i < $max; $i += 2) {
             $key        = $this->stack[$i];
             $value      = $this->stack[$i + 1];
             $dict[$key] = $value;
-            unset($this->stack[$i], $this->stack[$i+1]);
+            unset($this->stack[$i], $this->stack[$i + 1]);
         }
         unset($this->stack[$k]);
     }
@@ -1183,10 +1183,10 @@ class PythonPickle extends AbstractAdapter
      */
     protected function loadTuple()
     {
-        $k                =  $this->lastMarker();
-        $this->stack[$k]  =  [];
+        $k                = $this->lastMarker();
+        $this->stack[$k]  = [];
         $tuple            =& $this->stack[$k];
-        $max              =  count($this->stack);
+        $max              = count($this->stack);
         for ($i = $k + 1; $i < $max; $i++) {
             $tuple[] = $this->stack[$i];
             unset($this->stack[$i]);
@@ -1278,7 +1278,7 @@ class PythonPickle extends AbstractAdapter
         if ($eolPos === false) {
             throw new Exception\RuntimeException('No new line found');
         }
-        $ret       = substr($this->pickle, $this->pos, $eolPos-$this->pos);
+        $ret       = substr($this->pickle, $this->pos, $eolPos - $this->pos);
         $this->pos = $eolPos + $eolLen;
 
         return $ret;
@@ -1310,7 +1310,7 @@ class PythonPickle extends AbstractAdapter
      */
     protected function lastMarker()
     {
-        for ($k = count($this->stack)-1; $k >= 0; $k -= 1) {
+        for ($k = count($this->stack) - 1; $k >= 0; $k -= 1) {
             if ($this->stack[$k] === $this->marker) {
                 break;
             }
