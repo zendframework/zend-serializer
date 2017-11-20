@@ -18,7 +18,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#30](https://github.com/zendframework/zend-serializer/issues/30) 
+  Fixed unserialize PythonPickle on big endian
 
 ## 2.8.0 - 2016-06-21
 
