@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#32](https://github.com/zendframework/zend-serializer/pull/32)
+  Travis: fix doctrine/instantiator on PHP-5.6
 - [#27](https://github.com/zendframework/zend-serializer/pull/27)
   CS fixes for new coding standard
 - [#25](https://github.com/zendframework/zend-serializer/pull/25)
