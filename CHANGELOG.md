@@ -36,6 +36,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#26](https://github.com/zendframework/zend-serializer/pull/26)
+  Travis: Remove fast finish flag
+- [#32](https://github.com/zendframework/zend-serializer/pull/32)
+  Travis: fix doctrine/instantiator on PHP-5.6
 - [#27](https://github.com/zendframework/zend-serializer/pull/27)
   CS fixes for new coding standard
 - [#25](https://github.com/zendframework/zend-serializer/pull/25)
