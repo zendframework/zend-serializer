@@ -9,13 +9,14 @@
 
 namespace ZendTest\Serializer\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Serializer;
 
 /**
  * @group      Zend_Serializer
  * @covers Zend\Serializer\Adapter\PythonPickle
  */
-class PythonPickleSerializeProtocol0Test extends \PHPUnit_Framework_TestCase
+class PythonPickleSerializeProtocol0Test extends TestCase
 {
     /**
      * @var Serializer\Adapter\PythonPickle

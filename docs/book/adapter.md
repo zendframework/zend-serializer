@@ -55,7 +55,7 @@ comment | `string`  |               | An optional comment that appears in the pa
 ## The Json Adapter
 
 The [JSON](http://wikipedia.org/wiki/JavaScript_Object_Notation) adapter provides a bridge to the
-[zend-json](https://zendframework.github.io/zend-json) component.
+[zend-json](https://docs.zendframework.com/zend-json) component.
 
 Available options include:
 
@@ -71,7 +71,7 @@ This adapter converts PHP types to a [Python Pickle](http://docs.python.org/libr
 string representation. With it, you can read the serialized data with Python and
 read Pickled data from Python with PHP.
 
-This adapter requires the [zend-math](https://zendframework.github.io/zend-math/) component:
+This adapter requires the [zend-math](https://docs.zendframework.com/zend-math/) component:
 
 ```bash
 $ composer require zendframework/zend-math

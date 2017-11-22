@@ -9,6 +9,7 @@
 
 namespace ZendTest\Serializer;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Serializer\Adapter;
 use Zend\Serializer\AdapterPluginManager;
 use Zend\Serializer\Exception\RuntimeException;
@@ -20,12 +21,8 @@ use Zend\ServiceManager\ServiceManager;
  * @group      Zend_Serializer
  * @covers Zend\Serializer\Serializer
  */
-class SerializerTest extends \PHPUnit_Framework_TestCase
+class SerializerTest extends TestCase
 {
-    public function setUp()
-    {
-    }
-
     public function tearDown()
     {
         Serializer::resetAdapterPluginManager();
@@ -59,7 +56,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
 
     public function testFactoryUnknownAdapter()
     {
-        $this->setExpectedException('Zend\ServiceManager\Exception\ServiceNotFoundException');
+        $this->expectException('Zend\ServiceManager\Exception\ServiceNotFoundException');
         Serializer::factory('unknown');
     }
 

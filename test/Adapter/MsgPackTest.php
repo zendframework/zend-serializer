@@ -9,6 +9,7 @@
 
 namespace ZendTest\Serializer\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Serializer;
 use Zend\Serializer\Exception\ExtensionNotLoadedException;
 
@@ -16,7 +17,7 @@ use Zend\Serializer\Exception\ExtensionNotLoadedException;
  * @group      Zend_Serializer
  * @covers Zend\Serializer\Adapter\MsgPack
  */
-class MsgPackTest extends \PHPUnit_Framework_TestCase
+class MsgPackTest extends TestCase
 {
     /**
      * @var Serializer\Adapter\MsgPack
@@ -143,10 +144,8 @@ class MsgPackTest extends \PHPUnit_Framework_TestCase
     public function testUnserializeInvalid()
     {
         $value = "\0\1\r\n";
-        $this->setExpectedException(
-            'Zend\Serializer\Exception\RuntimeException',
-            'Unserialization failed'
-        );
+        $this->expectException('Zend\Serializer\Exception\RuntimeException');
+        $this->expectExceptionMessage('Unserialization failed');
         $this->adapter->unserialize($value);
     }
 }
