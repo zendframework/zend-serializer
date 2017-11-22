@@ -8,7 +8,7 @@
 namespace ZendTest\Serializer;
 
 use Interop\Container\ContainerInterface;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Serializer\Adapter\AdapterInterface;
 use Zend\Serializer\AdapterPluginManager;
 use Zend\Serializer\AdapterPluginManagerFactory;

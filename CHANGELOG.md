@@ -18,7 +18,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#34](https://github.com/zendframework/zend-serializer/pull/34)
+  * redundant doctrine dependency
+  * documentaion updates
+  * travis CI update
 
 ## 2.8.1 - 2017-11-20
 

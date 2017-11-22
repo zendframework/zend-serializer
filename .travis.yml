@@ -2,25 +2,14 @@ sudo: false
 
 language: php
 
-branches:
-  except:
-    - /^release-.*$/
-    - /^ghgfk-.*$/
-
 cache:
   directories:
     - $HOME/.composer/cache
-    - $HOME/.local
-    - zf-mkdoc-theme
 
 env:
   global:
-    - COMPOSER_ARGS="--no-interaction --ignore-platform-reqs"
-    - SITE_URL: https://zendframework.github.io/zend-serializer
-    - GH_USER_NAME: "Matthew Weier O'Phinney"
-    - GH_USER_EMAIL: matthew@weierophinney.net
-    - GH_REF: github.com/zendframework/zend-serializer.git
-    - secure: "Eus59mQXnKuHFWh7olBeAoc3e2AHp9z2IvJuZx6zcLO1HBu7+iTXhZL74jwbFW3h6g+2jgIyLIr81aGNLwpxQfZKhWRMM2O8kQIMnz+svRh2RC30zs2bcuDyoHr086lQEcOXMGcnMl52X00DIr4jMj7sJ1gVe+g9aZpoU4Qq/4J2d+bKKnN802e+NBzsgIhY+NUmffZpb5s/RWejhR2HCbyfQrsNEEmXO/qHOwJNxlD4bG1ckXDtidFBepfEJT+/sbJkrkNTibOoxjyZyfADt8YOujktEyYBAgoCf5cv/Erw0lQO5lwnXI8O6Cp86x9zJtxo2Vm6RkIa5fUR6qb/Difta58OXHzXJsCrPTfTiV/SKWr31Rfsd3HlJhwd3aogsF5VBBGKrNKZ+avXbuq++QThXwkE+XUmxKHsbFpct7q+AP1CkOUefEKu/AayHnJulUpiL4JzG/BvjSC8rVAUlsXf51gVL/rTVjqbR5YCmoxGBSORHl4WFgOmq9D2T4TKEhGgsQBF9IB3N6VVc0TE+S5XVSwkHdd1d76VpasYeNO3UNEstfc+R0kWYGpmXVmvubBLX3i/Zv/k0LwfEaSUl06MK+Xnc0twx8da8cd7WDChP1YAfJn531msQjgjWtz+c3E3EiFExILvOnPotEj+S0tEU/GPVXkiQKiJwojWozI="
+    - COMPOSER_ARGS="--no-interaction"
+    - COVERAGE_DEPS="satooshi/php-coveralls"
 
 matrix:
   include:
@@ -30,56 +19,58 @@ matrix:
     - php: 5.6
       env:
         - DEPS=locked
-        - DEPLOY_DOCS="$(if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then echo -n 'true' ; else echo -n 'false' ; fi)"
-        - PATH="$HOME/.local/bin:$PATH"
+        - LEGACY_DEPS="phpunit/phpunit"
     - php: 5.6
       env:
         - DEPS=latest
-        - TEST_COVERAGE=true
-    - php: 7
+    - php: 7.0
       env:
         - DEPS=lowest
-    - php: 7
+    - php: 7.0
+      env:
+        - DEPS=locked
+        - LEGACY_DEPS="phpunit/phpunit"
+    - php: 7.0
+      env:
+        - DEPS=latest
+    - php: 7.1
+      env:
+        - DEPS=lowest
+    - php: 7.1
       env:
         - DEPS=locked
         - CS_CHECK=true
-    - php: 7
+        - TEST_COVERAGE=true
+    - php: 7.1
       env:
         - DEPS=latest
-    - php: hhvm
+    - php: 7.2
       env:
         - DEPS=lowest
-    - php: hhvm
+    - php: 7.2
       env:
         - DEPS=locked
-    - php: hhvm
+    - php: 7.2
       env:
         - DEPS=latest
-  allow_failures:
-    - php: hhvm
-
-notifications:
-  irc: "irc.freenode.org#zftalk.dev"
-  email: false
 
 before_install:
-  - travis_retry composer self-update
   - if [[ $TEST_COVERAGE != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
 
 install:
+  - travis_retry composer install $COMPOSER_ARGS --ignore-platform-reqs
+  - if [[ $LEGACY_DEPS != '' ]]; then travis_retry composer update $COMPOSER_ARGS --with-dependencies $LEGACY_DEPS ; fi
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi
-  - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS satooshi/php-coveralls:^1.0 ; fi
-  - travis_retry composer install $COMPOSER_ARGS
-  - composer show --installed
+  - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS $COVERAGE_DEPS ; fi
+  - stty cols 120 && composer show
 
 script:
   - if [[ $TEST_COVERAGE == 'true' ]]; then composer test-coverage ; else composer test ; fi
   - if [[ $CS_CHECK == 'true' ]]; then composer cs-check ; fi
-  - if [[ $DEPLOY_DOCS == "true" && "$TRAVIS_TEST_RESULT" == "0" ]]; then wget -O theme-installer.sh "https://raw.githubusercontent.com/zendframework/zf-mkdoc-theme/master/theme-installer.sh" ; chmod 755 theme-installer.sh ; ./theme-installer.sh ; fi
-
-after_success:
-  - if [[ $DEPLOY_DOCS == "true" ]]; then echo "Preparing to build and deploy documentation" ; ./zf-mkdoc-theme/deploy.sh ; echo "Completed deploying documentation" ; fi
 
 after_script:
   - if [[ $TEST_COVERAGE == 'true' ]]; then composer upload-coverage ; fi
+
+notifications:
+  email: false

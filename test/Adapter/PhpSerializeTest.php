@@ -9,13 +9,14 @@
 
 namespace ZendTest\Serializer\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Serializer;
 
 /**
  * @group      Zend_Serializer
  * @covers Zend\Serializer\Adapter\PhpSerialize
  */
-class PhpSerializeTest extends \PHPUnit_Framework_TestCase
+class PhpSerializeTest extends TestCase
 {
     /**
      * @var Serializer\Adapter\PhpSerialize
@@ -142,10 +143,8 @@ class PhpSerializeTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnserializingNoStringRaisesException($value, $expected)
     {
-        $this->setExpectedException(
-            'Zend\Serializer\Exception\RuntimeException',
-            $expected
-        );
+        $this->expectException('Zend\Serializer\Exception\RuntimeException');
+        $this->expectExceptionMessage($expected);
         $this->adapter->unserialize($value);
     }
 
@@ -162,7 +161,8 @@ class PhpSerializeTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnserializingInvalidStringRaisesException($string, $expected)
     {
-        $this->setExpectedException(Serializer\Exception\RuntimeException::class, $expected);
+        $this->expectException(Serializer\Exception\RuntimeException::class);
+        $this->expectExceptionMessage($expected);
         $this->adapter->unserialize($string);
     }
 }

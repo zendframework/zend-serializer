@@ -9,6 +9,7 @@
 
 namespace ZendTest\Serializer\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Serializer;
 use Zend\Serializer\Exception\ExtensionNotLoadedException;
 
@@ -16,7 +17,7 @@ use Zend\Serializer\Exception\ExtensionNotLoadedException;
  * @group      Zend_Serializer
  * @covers Zend\Serializer\Adapter\IgBinary
  */
-class IgBinaryTest extends \PHPUnit_Framework_TestCase
+class IgBinaryTest extends TestCase
 {
     /**
      * @var Serializer\Adapter\IgBinary
@@ -134,10 +135,8 @@ class IgBinaryTest extends \PHPUnit_Framework_TestCase
     public function testUnserialzeInvalid()
     {
         $value = "\0\1\r\n";
-        $this->setExpectedException(
-            'Zend\Serializer\Exception\RuntimeException',
-            'Unserialization failed'
-        );
+        $this->expectException('Zend\Serializer\Exception\RuntimeException');
+        $this->expectExceptionMessage('Unserialization failed');
         $this->adapter->unserialize($value);
     }
 }
