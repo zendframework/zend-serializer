@@ -7,4 +7,4 @@ zend-serializer provides an adapter-based interface for generating and
 recovering from storable representations of PHP types.
 
 - File issues at https://github.com/zendframework/zend-serializer/issues
-- Documentation is at https://zendframework.github.io/zend-serializer/
+- Documentation is at https://docs.zendframework.com/zend-serializer/
