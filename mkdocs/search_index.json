@@ -2,12 +2,12 @@
     "docs": [
         {
             "location": "/",
-            "text": "zend-serializer\n\n\n\n\n\n\nzend-serializer provides an adapter-based interface for generating and\nrecovering from storable representations of PHP types.\n\n\n\n\nFile issues at https://github.com/zendframework/zend-serializer/issues\n\n\nDocumentation is at https://zendframework.github.io/zend-serializer/",
+            "text": "zend-serializer\n\n\n\n\n\n\nzend-serializer provides an adapter-based interface for generating and\nrecovering from storable representations of PHP types.\n\n\n\n\nFile issues at https://github.com/zendframework/zend-serializer/issues\n\n\nDocumentation is at https://docs.zendframework.com/zend-serializer/",
             "title": "Home"
         },
         {
             "location": "/#zend-serializer",
-            "text": "zend-serializer provides an adapter-based interface for generating and\nrecovering from storable representations of PHP types.   File issues at https://github.com/zendframework/zend-serializer/issues  Documentation is at https://zendframework.github.io/zend-serializer/",
+            "text": "zend-serializer provides an adapter-based interface for generating and\nrecovering from storable representations of PHP types.   File issues at https://github.com/zendframework/zend-serializer/issues  Documentation is at https://docs.zendframework.com/zend-serializer/",
             "title": "zend-serializer"
         },
         {
