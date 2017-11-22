@@ -8,13 +8,14 @@
  */
 namespace ZendTest\Serializer\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Serializer;
 use ZendTest\Serializer\TestAsset\Dummy;
 
 /**
  * @covers Zend\Serializer\Adapter\PhpCode
  */
-class PhpCodeTest extends \PHPUnit_Framework_TestCase
+class PhpCodeTest extends TestCase
 {
     /** @var Serializer\Adapter\PhpCode */
     private $adapter;
@@ -91,7 +92,8 @@ class PhpCodeTest extends \PHPUnit_Framework_TestCase
         }
         $value = 'not a serialized string';
 
-        $this->setExpectedException('Zend\Serializer\Exception\RuntimeException', 'syntax error');
+        $this->expectException('Zend\Serializer\Exception\RuntimeException');
+        $this->expectExceptionMessage('syntax error');
         $this->adapter->unserialize($value);
     }
 }

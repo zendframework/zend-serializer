@@ -9,6 +9,7 @@
 
 namespace ZendTest\Serializer\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Serializer;
 use Zend\Serializer\Exception\ExtensionNotLoadedException;
 
@@ -16,7 +17,7 @@ use Zend\Serializer\Exception\ExtensionNotLoadedException;
  * @group      Zend_Serializer
  * @covers Zend\Serializer\Adapter\Wddx
  */
-class WddxTest extends \PHPUnit_Framework_TestCase
+class WddxTest extends TestCase
 {
     /**
      * @var Serializer\Adapter\Wddx
@@ -202,10 +203,8 @@ class WddxTest extends \PHPUnit_Framework_TestCase
         }
 
         $value = 'not a serialized string';
-        $this->setExpectedException(
-            'Zend\Serializer\Exception\RuntimeException',
-            'DOMDocument::loadXML(): Start tag expected'
-        );
+        $this->expectException('Zend\Serializer\Exception\RuntimeException');
+        $this->expectExceptionMessage('DOMDocument::loadXML(): Start tag expected');
         $this->adapter->unserialize($value);
     }
 
@@ -216,10 +215,8 @@ class WddxTest extends \PHPUnit_Framework_TestCase
         }
 
         $value = '<wddxPacket version=\'1.0\'><header /></wddxPacket>';
-        $this->setExpectedException(
-            'Zend\Serializer\Exception\RuntimeException',
-            'Invalid wddx packet'
-        );
+        $this->expectException('Zend\Serializer\Exception\RuntimeException');
+        $this->expectExceptionMessage('Invalid wddx packet');
         $this->adapter->unserialize($value);
     }
 
@@ -228,7 +225,7 @@ class WddxTest extends \PHPUnit_Framework_TestCase
         $value    = '<!DOCTYPE>'
                   . '<wddxPacket version=\'1.0\'><header/>'
                   . '<data><string>test</string></data></wddxPacket>';
-        $this->setExpectedException("Zend\Serializer\Exception\RuntimeException");
+        $this->expectException("Zend\Serializer\Exception\RuntimeException");
         $data = $this->adapter->unserialize($value);
     }
 }

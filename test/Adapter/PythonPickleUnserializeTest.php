@@ -9,13 +9,14 @@
 
 namespace ZendTest\Serializer\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Serializer;
 
 /**
  * @group      Zend_Serializer
  * @covers Zend\Serializer\Adapter\PythonPickle
  */
-class PythonPickleUnserializeTest extends \PHPUnit_Framework_TestCase
+class PythonPickleUnserializeTest extends TestCase
 {
     /**
      * @var Serializer\Adapter\PythonPickle
@@ -356,10 +357,8 @@ class PythonPickleUnserializeTest extends \PHPUnit_Framework_TestCase
     public function testUnserialzeInvalid()
     {
         $value = 'not a serialized string';
-        $this->setExpectedException(
-            'Zend\Serializer\Exception\RuntimeException',
-            "Invalid or unknown opcode 'n'"
-        );
+        $this->expectException('Zend\Serializer\Exception\RuntimeException');
+        $this->expectExceptionMessage("Invalid or unknown opcode 'n'");
         $this->adapter->unserialize($value);
     }
 }

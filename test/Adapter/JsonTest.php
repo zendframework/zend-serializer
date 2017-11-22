@@ -9,13 +9,14 @@
 
 namespace ZendTest\Serializer\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Serializer;
 
 /**
  * @group      Zend_Serializer
  * @covers Zend\Serializer\Adapter\Json
  */
-class JsonTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends TestCase
 {
     /**
      * @var Serializer\Adapter\Json
@@ -153,10 +154,8 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     public function testUnserialzeInvalid()
     {
         $value = 'not a serialized string';
-        $this->setExpectedException(
-            'Zend\Serializer\Exception\RuntimeException',
-            'Unserialization failed: Decoding failed: Syntax error'
-        );
+        $this->expectException('Zend\Serializer\Exception\RuntimeException');
+        $this->expectExceptionMessage('Unserialization failed: Decoding failed: Syntax error');
         $this->adapter->unserialize($value);
     }
 }
