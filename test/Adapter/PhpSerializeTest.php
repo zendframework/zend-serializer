@@ -170,7 +170,7 @@ class PhpSerializeTest extends TestCase
     {
         $value = 'O:8:"stdClass":0:{}';
 
-        $this->adapter->getOptions()->setUnserializationWhitelist(false);
+        $this->adapter->getOptions()->setUnserializeClassWhitelist(false);
 
         $data = $this->adapter->unserialize($value);
 
@@ -187,7 +187,7 @@ class PhpSerializeTest extends TestCase
     {
         $value = 'O:8:"stdClass":0:{}';
 
-        $this->adapter->getOptions()->setUnserializationWhitelist([\My\Dummy::class]);
+        $this->adapter->getOptions()->setUnserializeClassWhitelist([\My\Dummy::class]);
 
         $data = $this->adapter->unserialize($value);
 
@@ -204,7 +204,7 @@ class PhpSerializeTest extends TestCase
     {
         $value = 'O:8:"stdClass":0:{}';
 
-        $this->adapter->getOptions()->setUnserializationWhitelist([\stdClass::class]);
+        $this->adapter->getOptions()->setUnserializeClassWhitelist([\stdClass::class]);
 
         $data = $this->adapter->unserialize($value);
         $this->assertInstanceOf(\stdClass::class, $data);

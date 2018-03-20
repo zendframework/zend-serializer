@@ -125,7 +125,7 @@ class PhpSerialize extends AbstractAdapter
 
         if (PHP_MAJOR_VERSION >= 7) {
             // the second parameter is only available on PHP 7.0 or higher
-            $ret = unserialize($serialized, ['allowed_classes' => $this->getOptions()->getUnserializationWhitelist()]);
+            $ret = unserialize($serialized, ['allowed_classes' => $this->getOptions()->getUnserializeClassWhitelist()]);
         } else {
             $ret = unserialize($serialized);
         }

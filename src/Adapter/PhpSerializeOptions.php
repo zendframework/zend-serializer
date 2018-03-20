@@ -23,30 +23,30 @@ class PhpSerializeOptions extends AdapterOptions
      *
      * @var array|bool
      */
-    protected $unserializationWhitelist = true;
+    protected $unserializeClassWhitelist = true;
 
     /**
-     * @param  array|bool $unserializationWhitelist
+     * @param  array|bool $unserializeClassWhitelist
      *
      * @return PhpSerializeOptions
      */
-    public function setUnserializationWhitelist($unserializationWhitelist)
+    public function setUnserializeClassWhitelist($unserializeClassWhitelist)
     {
-        if (($unserializationWhitelist !== true) && (PHP_MAJOR_VERSION < 7)) {
+        if (($unserializeClassWhitelist !== true) && (PHP_MAJOR_VERSION < 7)) {
             throw new Exception\InvalidArgumentException(
                 'Class whitelist for unserialize() is only available on PHP 7.0 or higher.'
             );
         }
 
-        $this->unserializationWhitelist = $unserializationWhitelist;
+        $this->unserializeClassWhitelist = $unserializeClassWhitelist;
         return $this;
     }
 
     /**
      * @return array|bool
      */
-    public function getUnserializationWhitelist()
+    public function getUnserializeClassWhitelist()
     {
-        return $this->unserializationWhitelist;
+        return $this->unserializeClassWhitelist;
     }
 }
