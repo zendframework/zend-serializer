@@ -173,8 +173,14 @@ class PhpSerializeTest extends TestCase
         $this->adapter->getOptions()->setUnserializationWhitelist(false);
 
         $data = $this->adapter->unserialize($value);
-        $this->assertNotInstanceOf(\stdClass::class, $data);
-        $this->assertInstanceOf('__PHP_Incomplete_Class', $data);
+
+        if (PHP_MAJOR_VERSION >= 7) {
+            $this->assertNotInstanceOf(\stdClass::class, $data);
+            $this->assertInstanceOf('__PHP_Incomplete_Class', $data);
+        } else {
+            // Pre PHP 7.0 the whitelist should have no effect
+            $this->assertInstanceOf(\stdClass::class, $data);
+        }
     }
 
     public function testUnserializeClassNotAllowed()
@@ -184,8 +190,14 @@ class PhpSerializeTest extends TestCase
         $this->adapter->getOptions()->setUnserializationWhitelist([\My\Dummy::class]);
 
         $data = $this->adapter->unserialize($value);
-        $this->assertNotInstanceOf(\stdClass::class, $data);
-        $this->assertInstanceOf('__PHP_Incomplete_Class', $data);
+
+        if (PHP_MAJOR_VERSION >= 7) {
+            $this->assertNotInstanceOf(\stdClass::class, $data);
+            $this->assertInstanceOf('__PHP_Incomplete_Class', $data);
+        } else {
+            // Pre PHP 7.0 the whitelist should have no effect
+            $this->assertInstanceOf(\stdClass::class, $data);
+        }
     }
 
     public function testUnserializeClassAllowed()
