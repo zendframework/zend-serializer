@@ -3,12 +3,13 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
 namespace Zend\Serializer\Adapter;
 
+use Traversable;
 use Zend\Serializer\Exception;
 use Zend\Stdlib\ErrorHandler;
 
@@ -29,7 +30,7 @@ class PhpSerialize extends AbstractAdapter
     /**
      * Constructor
      *
-     * @param  array|\Traversable|PhpSerializeOptions|null $options
+     * @param  array|Traversable|PhpSerializeOptions|null $options
      */
     public function __construct($options = null)
     {
@@ -45,7 +46,7 @@ class PhpSerialize extends AbstractAdapter
     /**
      * Set options
      *
-     * @param  array|\Traversable|PhpSerializeOptions $options
+     * @param  array|Traversable|PhpSerializeOptions $options
      * @return PhpSerialize
      */
     public function setOptions($options)

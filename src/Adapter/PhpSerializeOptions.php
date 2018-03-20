@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -21,12 +21,12 @@ class PhpSerializeOptions extends AdapterOptions
      * or true if all classes should be allowed (behavior of pre PHP 7.0)
      * or false if no classes should be allowed
      *
-     * @var array|bool
+     * @var string[]|bool
      */
     protected $unserializeClassWhitelist = true;
 
     /**
-     * @param  array|bool $unserializeClassWhitelist
+     * @param  string[]|bool $unserializeClassWhitelist
      *
      * @return PhpSerializeOptions
      */
@@ -43,7 +43,7 @@ class PhpSerializeOptions extends AdapterOptions
     }
 
     /**
-     * @return array|bool
+     * @return string[]|bool
      */
     public function getUnserializeClassWhitelist()
     {
