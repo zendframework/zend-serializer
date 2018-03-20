@@ -165,4 +165,37 @@ class PhpSerializeTest extends TestCase
         $this->expectExceptionMessage($expected);
         $this->adapter->unserialize($string);
     }
+
+    public function testUnserializeNoWhitelistedClasses()
+    {
+        $value = 'O:8:"stdClass":0:{}';
+
+        $this->adapter->getOptions()->setUnserializationWhitelist(false);
+
+        $data = $this->adapter->unserialize($value);
+        $this->assertNotInstanceOf(\stdClass::class, $data);
+        $this->assertInstanceOf('__PHP_Incomplete_Class', $data);
+    }
+
+    public function testUnserializeClassNotAllowed()
+    {
+        $value = 'O:8:"stdClass":0:{}';
+
+        $this->adapter->getOptions()->setUnserializationWhitelist([\My\Dummy::class]);
+
+        $data = $this->adapter->unserialize($value);
+        $this->assertNotInstanceOf(\stdClass::class, $data);
+        $this->assertInstanceOf('__PHP_Incomplete_Class', $data);
+    }
+
+    public function testUnserializeClassAllowed()
+    {
+        $value = 'O:8:"stdClass":0:{}';
+
+        $this->adapter->getOptions()->setUnserializationWhitelist([\stdClass::class]);
+
+        $data = $this->adapter->unserialize($value);
+        $this->assertInstanceOf(\stdClass::class, $data);
+        $this->assertNotInstanceOf('__PHP_Incomplete_Class', $data);
+    }
 }

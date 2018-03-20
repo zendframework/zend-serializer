@@ -22,7 +22,14 @@ class PhpSerialize extends AbstractAdapter
     private static $serializedFalse = null;
 
     /**
+     * @var PhpSerializeOptions
+     */
+    protected $options;
+
+    /**
      * Constructor
+     *
+     * @param  array|\Traversable|PhpSerializeOptions|null $options
      */
     public function __construct($options = null)
     {
@@ -33,6 +40,36 @@ class PhpSerialize extends AbstractAdapter
         }
 
         parent::__construct($options);
+    }
+
+    /**
+     * Set options
+     *
+     * @param  array|\Traversable|PhpSerializeOptions $options
+     * @return PhpSerialize
+     */
+    public function setOptions($options)
+    {
+        if (! $options instanceof PhpSerializeOptions) {
+            $options = new PhpSerializeOptions($options);
+        }
+
+        $this->options = $options;
+        return $this;
+    }
+
+    /**
+     * Get options
+     *
+     * @return PhpSerializeOptions
+     */
+    public function getOptions()
+    {
+        if ($this->options === null) {
+            $this->options = new PhpSerializeOptions();
+        }
+
+        return $this->options;
     }
 
     /**
@@ -85,7 +122,14 @@ class PhpSerialize extends AbstractAdapter
         }
 
         ErrorHandler::start(E_NOTICE);
-        $ret = unserialize($serialized);
+
+        if (PHP_MAJOR_VERSION >= 7) {
+            // the second parameter is only available on PHP 7.0 or higher
+            $ret = unserialize($serialized, ['allowed_classes' => $this->getOptions()->getUnserializationWhitelist()]);
+        } else {
+            $ret = unserialize($serialized);
+        }
+
         $err = ErrorHandler::stop();
         if ($ret === false) {
             throw new Exception\RuntimeException('Unserialization failed', 0, $err);
