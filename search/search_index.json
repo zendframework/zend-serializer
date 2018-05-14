@@ -3,7 +3,7 @@
         {
             "location": "/",
             "text": "zend-serializer\n\n\n\n\n\n\nzend-serializer provides an adapter-based interface for generating and\nrecovering from storable representations of PHP types.\n\n\n\n\nFile issues at https://github.com/zendframework/zend-serializer/issues\n\n\nDocumentation is at https://docs.zendframework.com/zend-serializer/",
-            "title": "Home"
+            "title": "zend-serializer"
         },
         {
             "location": "/#zend-serializer",
