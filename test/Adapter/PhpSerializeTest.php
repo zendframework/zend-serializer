@@ -1,15 +1,14 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-serializer for the canonical source repository
+ * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-serializer/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Serializer\Adapter;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Zend\Serializer;
 use Zend\Serializer\Exception\InvalidArgumentException;
 
@@ -167,65 +166,59 @@ class PhpSerializeTest extends TestCase
         $this->adapter->unserialize($string);
     }
 
-    public function testUnserializeNoWhitelistedClasses()
+    /**
+     * @requires PHP 7.0
+     */
+    public function testPhp7WillNotUnserializeObjectsWhenUnserializeWhitelistedClassesIsFalse()
     {
         $value = 'O:8:"stdClass":0:{}';
+        $this->adapter->getOptions()->setUnserializeClassWhitelist(false);
 
-        if (PHP_MAJOR_VERSION >= 7) {
-            $this->adapter->getOptions()->setUnserializeClassWhitelist(false);
+        $data = $this->adapter->unserialize($value);
 
-            $data = $this->adapter->unserialize($value);
-
-            $this->assertNotInstanceOf(\stdClass::class, $data);
-            $this->assertInstanceOf('__PHP_Incomplete_Class', $data);
-        } else {
-            // In PHP < 7.0 the options-class will throw an exception
-
-            self::expectException(InvalidArgumentException::class);
-            self::expectExceptionMessage('Class whitelist for unserialize() is only available on PHP 7.0 or higher.');
-
-            $this->adapter->getOptions()->setUnserializeClassWhitelist(false);
-        }
+        $this->assertNotInstanceOf(stdClass::class, $data);
+        $this->assertInstanceOf('__PHP_Incomplete_Class', $data);
     }
 
-    public function testUnserializeClassNotAllowed()
+    public function testWhenUnserializeClassWhiteListIsFalseButPHPIsPriorTo7AnExceptionIsRaised()
     {
         $value = 'O:8:"stdClass":0:{}';
 
         if (PHP_MAJOR_VERSION >= 7) {
-            $this->adapter->getOptions()->setUnserializeClassWhitelist([\My\Dummy::class]);
-
-            $data = $this->adapter->unserialize($value);
-
-            $this->assertNotInstanceOf(\stdClass::class, $data);
-            $this->assertInstanceOf('__PHP_Incomplete_Class', $data);
-        } else {
-            // In PHP < 7.0 the options-class will throw an exception
-
-            self::expectException(InvalidArgumentException::class);
-            self::expectExceptionMessage('Class whitelist for unserialize() is only available on PHP 7.0 or higher.');
-
-            $this->adapter->getOptions()->setUnserializeClassWhitelist(false);
+            $this->markTestSkipped(sprintf('Test %s is only needed in PHP versions prior to 7.0', __FUNCTION__));
         }
+
+        self::expectException(InvalidArgumentException::class);
+        self::expectExceptionMessage('Class whitelist for unserialize() is only available on PHP 7.0 or higher.');
+        $this->adapter->getOptions()->setUnserializeClassWhitelist(false);
     }
 
-    public function testUnserializeClassAllowed()
+    /**
+     * @requires PHP 7.0
+     */
+    public function testUnserializeWillNotUnserializeClassesThatAreNotInTheWhitelist()
     {
         $value = 'O:8:"stdClass":0:{}';
 
-        if (PHP_MAJOR_VERSION >= 7) {
-            $this->adapter->getOptions()->setUnserializeClassWhitelist([\stdClass::class]);
+        $this->adapter->getOptions()->setUnserializeClassWhitelist([\My\Dummy::class]);
 
-            $data = $this->adapter->unserialize($value);
-            $this->assertInstanceOf(\stdClass::class, $data);
-            $this->assertNotInstanceOf('__PHP_Incomplete_Class', $data);
-        } else {
-            // In PHP < 7.0 the options-class will throw an exception
+        $data = $this->adapter->unserialize($value);
 
-            self::expectException(InvalidArgumentException::class);
-            self::expectExceptionMessage('Class whitelist for unserialize() is only available on PHP 7.0 or higher.');
+        $this->assertNotInstanceOf(stdClass::class, $data);
+        $this->assertInstanceOf('__PHP_Incomplete_Class', $data);
+    }
 
-            $this->adapter->getOptions()->setUnserializeClassWhitelist(false);
-        }
+    /**
+     * @requires PHP 7.0
+     */
+    public function testUnserializeWillUnserializeAnyClassWhenUnserializeWhitelistedClassesIsTrue()
+    {
+        $value = 'O:8:"stdClass":0:{}';
+
+        $this->adapter->getOptions()->setUnserializeClassWhitelist([stdClass::class]);
+
+        $data = $this->adapter->unserialize($value);
+        $this->assertInstanceOf(stdClass::class, $data);
+        $this->assertNotInstanceOf('__PHP_Incomplete_Class', $data);
     }
 }

@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-serializer for the canonical source repository
+ * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-serializer/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Serializer\Adapter;
@@ -124,12 +122,10 @@ class PhpSerialize extends AbstractAdapter
 
         ErrorHandler::start(E_NOTICE);
 
-        if (PHP_MAJOR_VERSION >= 7) {
-            // the second parameter is only available on PHP 7.0 or higher
-            $ret = unserialize($serialized, ['allowed_classes' => $this->getOptions()->getUnserializeClassWhitelist()]);
-        } else {
-            $ret = unserialize($serialized);
-        }
+        // The second parameter to unserialize() is only available on PHP 7.0 or higher
+        $ret = PHP_MAJOR_VERSION >= 7
+            ? unserialize($serialized, ['allowed_classes' => $this->getOptions()->getUnserializeClassWhitelist()])
+            : unserialize($serialized);
 
         $err = ErrorHandler::stop();
         if ($ret === false) {
