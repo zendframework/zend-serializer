@@ -3,12 +3,13 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
 namespace Zend\Serializer\Adapter;
 
+use Traversable;
 use Zend\Serializer\Exception;
 use Zend\Stdlib\ErrorHandler;
 
@@ -22,7 +23,14 @@ class PhpSerialize extends AbstractAdapter
     private static $serializedFalse = null;
 
     /**
+     * @var PhpSerializeOptions
+     */
+    protected $options;
+
+    /**
      * Constructor
+     *
+     * @param  array|Traversable|PhpSerializeOptions|null $options
      */
     public function __construct($options = null)
     {
@@ -33,6 +41,36 @@ class PhpSerialize extends AbstractAdapter
         }
 
         parent::__construct($options);
+    }
+
+    /**
+     * Set options
+     *
+     * @param  array|Traversable|PhpSerializeOptions $options
+     * @return PhpSerialize
+     */
+    public function setOptions($options)
+    {
+        if (! $options instanceof PhpSerializeOptions) {
+            $options = new PhpSerializeOptions($options);
+        }
+
+        $this->options = $options;
+        return $this;
+    }
+
+    /**
+     * Get options
+     *
+     * @return PhpSerializeOptions
+     */
+    public function getOptions()
+    {
+        if ($this->options === null) {
+            $this->options = new PhpSerializeOptions();
+        }
+
+        return $this->options;
     }
 
     /**
@@ -85,7 +123,14 @@ class PhpSerialize extends AbstractAdapter
         }
 
         ErrorHandler::start(E_NOTICE);
-        $ret = unserialize($serialized);
+
+        if (PHP_MAJOR_VERSION >= 7) {
+            // the second parameter is only available on PHP 7.0 or higher
+            $ret = unserialize($serialized, ['allowed_classes' => $this->getOptions()->getUnserializeClassWhitelist()]);
+        } else {
+            $ret = unserialize($serialized);
+        }
+
         $err = ErrorHandler::stop();
         if ($ret === false) {
             throw new Exception\RuntimeException('Unserialization failed', 0, $err);
