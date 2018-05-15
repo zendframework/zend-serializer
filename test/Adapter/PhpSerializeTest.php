@@ -189,7 +189,9 @@ class PhpSerializeTest extends TestCase
         }
 
         self::expectException(InvalidArgumentException::class);
-        self::expectExceptionMessage('Class whitelist for unserialize() is only available on PHP 7.0 or higher.');
+        self::expectExceptionMessage(
+            'Class whitelist for unserialize() is only available on PHP versions 7.0 or higher.'
+        );
         $this->adapter->getOptions()->setUnserializeClassWhitelist(false);
     }
 
