@@ -149,7 +149,25 @@ type will be converted to a similar type that is serializable.</p>
 <p>The <code>Zend\Serializer\Adapter\PhpSerialize</code> adapter uses the built-in
 <a href="http://php.net/serialize">serialize()</a>/<a href="http://php.net/unserialize">unserialize()</a>
 functions, and is a good default adapter choice.</p>
-<p>There are no configurable options for this adapter.</p>
+<p>Available options include:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>unserialize_class_whitelist</td>
+<td><code>array</code> or <code>bool</code></td>
+<td><code>true</code></td>
+<td>The allowed classes for unserialize(), see <a href="http://php.net/unserialize">unserialize()</a> for more information. Only available on PHP 7.0 or higher.</td>
+</tr>
+</tbody>
+</table></div>
 <h2 id="the-igbinary-adapter">The IgBinary Adapter</h2>
 <p><a href="http://pecl.php.net/package/igbinary">Igbinary</a> was originally released by
 Sulake Dynamoid Oy and since 2011-03-14 moved to <a href="http://pecl.php.net">PECL</a> and
