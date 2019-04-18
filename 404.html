@@ -7,11 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="zend-serializer">  
-    <link rel="shortcut icon" href="../img/favicon.ico">
+    <link rel="shortcut icon" href="//img/favicon.ico">
 
-    <title>Intro - zend-serializer - Zend Framework Docs</title>
+    <title>zend-serializer - Zend Framework Docs</title>
 
-    <link rel="stylesheet" href="../css/styles-f3b53f5ceb.css">
+    <link rel="stylesheet" href="//css/styles-f3b53f5ceb.css">
 </head>
 <body id="page-top">
 
@@ -31,7 +31,7 @@
             
             <span class="navbar-brand">
                 <a class="logo-link" href="https://framework.zend.com/" data-tooltip data-placement="bottom" title="Go to the ZF homepage">
-                    <img src="../img/zend-framework-logo.svg" height="28" alt="Zend Framework">
+                    <img src="//img/zend-framework-logo.svg" height="28" alt="Zend Framework">
                 </a>
             </span>
         </div>
@@ -66,7 +66,7 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="..">zend-serializer</a>
+            <a href="/.">zend-serializer</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -75,19 +75,19 @@
             
                 
                     <li class="subnavigation__list-item ">
-                        <a href=".." class="subnavigation__link">zend-serializer</a>
-                    </li>
-                
-            
-                
-                    <li class="subnavigation__list-item subnavigation__list-item--active">
-                        <a href="./" class="subnavigation__link">Intro</a>
+                        <a href="/." class="subnavigation__link">zend-serializer</a>
                     </li>
                 
             
                 
                     <li class="subnavigation__list-item ">
-                        <a href="../adapter/" class="subnavigation__link">Adapters</a>
+                        <a href="/intro/" class="subnavigation__link">Intro</a>
+                    </li>
+                
+            
+                
+                    <li class="subnavigation__list-item ">
+                        <a href="/adapter/" class="subnavigation__link">Adapters</a>
                     </li>
                 
             
@@ -160,228 +160,18 @@
             <div class="col-md-9 col-xs-12 content" role="main">
             <!-- content:begin -->
                 
-                    <ol class="breadcrumb" role="navigation" aria-label="breadcrumbs navigation">
-    <li><a href="https://framework.zend.com/">Home</a></li>
 
-    
-        <li><a href="https://docs.zendframework.com/">Documentation</a></li>
+<h1 class="content__title">404</h1>
+<blockquote>
+    <h3>Something went wrong!</h3>
+    <p>
+        We're sorry, but the page you are looking for does not exist.
+    </p>
+</blockquote>
 
-        
-            <li><a href="..">zend-serializer</a></li>
-
-            
-
-            <li class="active">Intro</li>
-        
-    
-</ol>
+<a href="/" class="btn btn-default" role="button">Go to homepage</a>
 
 
-    
-
-    
-    
-
-    
-    
-        <div class="toc">
-            <h6 class="toc__headline">In This Article</h6>
-            <ul class="toc__list">
-                
-                    <li class="toc__entry">
-                        <a href="#quick-start" class="toc__link">Quick Start</a>
-                    </li>
-                
-                    <li class="toc__entry">
-                        <a href="#basic-configuration-options" class="toc__link">Basic configuration Options</a>
-                    </li>
-                
-                    <li class="toc__entry">
-                        <a href="#available-methods" class="toc__link">Available Methods</a>
-                    </li>
-                
-            </ul>
-        </div>
-    
-
-
-    <h1 id="introduction">Introduction</h1>
-<p>zend-serialzier provides an adapter-based interface for serializing and
-deserializing PHP types to and from different representations.</p>
-<p>For more information what a serializer is read the wikipedia page of
-<a href="http://en.wikipedia.org/wiki/Serialization">Serialization</a>.</p>
-<h2 id="quick-start">Quick Start</h2>
-<p>Serializing adapters can either be created from the provided
-<code>Zend\Serializer\Serializer::factory</code> method, or by instantiating one of the
-<code>Zend\Serializer\Adapter\*</code> classes.</p>
-<pre class="codehilite"><code class="language-php">use Zend\Serializer\Adapter;
-use Zend\Serializer\Exception;
-use Zend\Serializer\Serializer;
-
-// Via factory:
-$serializer = Serializer::factory(Adapter\PhpSerialize::class);
-
-// Alternately:
-$serializer = new Adapter\PhpSerialize();
-
-// Now $serializer is an instance of Zend\Serializer\Adapter\AdapterInterface,
-// specifically Zend\Serializer\Adapter\PhpSerialize
-
-try {
-    $serialized = $serializer-&gt;serialize($data);
-    // now $serialized is a string
-
-    $unserialized = $serializer-&gt;unserialize($serialized);
-    // now $data == $unserialized
-} catch (Exception\ExceptionInterface $e) {
-    echo $e;
-}</code></pre>
-
-<p>The method <code>serialize()</code> generates a storable string. To regenerate this
-serialized data, call the method <code>unserialize()</code>.</p>
-<p>Any time an error is encountered serializing or unserializing, the adapter will
-throw a <code>Zend\Serializer\Exception\ExceptionInterface</code>.</p>
-<p>Because an application often uses only one serializer internally, it is possible
-to define and use a default serializer. That serializer will be used by default
-by other components like <code>Zend\Cache\Storage\Plugin\Serializer</code>.</p>
-<p>To define and use the default serializer, use the static serialization methods
-of the basic <code>Zend\Serializer\Serializer</code>:</p>
-<pre class="codehilite"><code class="language-php">use Zend\Serializer\Adapter;
-use Zend\Serializer\Exception;
-use Zend\Serializer\Serializer;
-
-Serializer::setDefaultAdapter(Adapter\PhpSerialize::class);
-
-try {
-    $serialized = Serializer::serialize($data);
-    // now $serialized is a string
-
-    $unserialized = Serializer::unserialize($serialized);
-    // now $data == $unserialized
-} catch (Exception\ExceptionInterface $e) {
-    echo $e;
-}</code></pre>
-
-<h2 id="basic-configuration-options">Basic configuration Options</h2>
-<p>To configure a serializer adapter, you can optionally use an instance of
-<code>Zend\Serializer\Adapter\AdapterOptions</code>, an instance of one of the adapter
-specific options class, an <code>array</code>, or a <code>Traversable</code> object. The adapter
-will convert it into the adapter specific options class instance (if present) or
-into the basic <code>Zend\Serializer\Adapter\AdapterOptions</code> class instance.</p>
-<p>Options can be passed as the second argument to the provided
-<code>Zend\Serializer\Serializer::factory</code> and <code>::setDefaultAdapter</code> methods, via the
-adapter's <code>setOptions</code> method, or as constructor arguments when directly
-instantiating an adapter.</p>
-<h2 id="available-methods">Available Methods</h2>
-<p>Each serializer implements the interface <code>Zend\Serializer\Adapter\AdapterInterface</code>.</p>
-<p>This interface defines the following methods:</p>
-<div class="table-responsive"><table>
-<thead>
-<tr>
-<th>Method signature</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>serialize(mixed $value) : string</code></td>
-<td>Generates a storable representation of a value.</td>
-</tr>
-<tr>
-<td><code>unserialize(string $value) : mixed</code></td>
-<td>Creates a PHP value from a stored representation.</td>
-</tr>
-</tbody>
-</table></div>
-<p>The base class <code>Zend\Serializer\Serializer</code> is used to instantiate the
-adapters, to configure the factory, and as a proxy for serialization operations.</p>
-<p>It defines the following static methods, where the following references map to
-classes/interfaces as follows:</p>
-<ul>
-<li><code>AdapterPluginManager</code>: <code>Zend\Serializer\AdapterPluginManager</code></li>
-<li><code>AdapterInterface</code>: <code>Zend\Serializer\Adapter\AdapterInterface</code></li>
-<li><code>AdapterOptions</code>: <code>Zend\Serializer\Adapter\AdapterOptions</code></li>
-</ul>
-<div class="table-responsive"><table>
-<thead>
-<tr>
-<th>Method signature</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>factory(/* ... */) : AdapterInterface</code></td>
-<td>Create a serializer adapter instance. Arguments are: <code>string|AdapterInterface $adapterName, AdapterOptions|array|Traversable $adapterOptions = null</code>.</td>
-</tr>
-<tr>
-<td><code>setAdapterPluginManager(AdapterPluginManager $adapters) : void</code></td>
-<td>Change the adapter plugin manager.</td>
-</tr>
-<tr>
-<td><code>getAdapterPluginManager() : AdapterPluginManager</code></td>
-<td>Get the adapter plugin manager.</td>
-</tr>
-<tr>
-<td><code>resetAdapterPluginManager() : void</code></td>
-<td>Resets the internal adapter plugin manager.</td>
-</tr>
-<tr>
-<td><code>setDefaultAdapter(string|AdapterInterface $adapter /* ... */) : void</code></td>
-<td>Change the default adapter. Full argument list: <code>string|AdapterInterface $adapter, AdapterOptions|array|Traversable $adapterOptions = null</code>.</td>
-</tr>
-<tr>
-<td><code>getDefaultAdapter() : AdapterInterface</code></td>
-<td>Get the default adapter.</td>
-</tr>
-<tr>
-<td><code>serialize(mixed $data /* ... */) : string</code></td>
-<td>Generates a storable representation of a value using the default adapter. Optionally, provide a  different adapter via the second argument. Full argument list: <code>mixed $value, string|AdapterInterface $adapter = null, AdapterOptions|array|Traversable $adapterOptions = null</code>.</td>
-</tr>
-<tr>
-<td><code>unserialize(string $value /* ... */) : mixed</code></td>
-<td>Creates a PHP value from a stored representation using the default adapter. Optionally, provide a different adapter via the second argument. Full argument list: <code>string $value, string|AdapterInterface|null $adapter = null, AdapterOptions|array|Traversable $adapterOptions = null</code></td>
-</tr>
-</tbody>
-</table></div>
-
-
-
-    <nav>
-    <ul class="page-nav hidden-print">
-
-        
-        <li class="page-nav__item">
-            
-                <a rel="prev" class="page-nav__link page-nav__link--prev" href="..">
-                    <i class="fa fa-chevron-left"></i> Previous
-                </a>
-            
-        </li>
-
-        
-        <li class="page-nav__item">
-            
-                <a rel="next" class="page-nav__link page-nav__link--next" href="../adapter/">
-                    Next <i class="fa fa-chevron-right"></i>
-                </a>
-            
-        </li>
-    </ul>
-</nav>
-
-
-
-    <div class="help-wanted">
-        <p>
-            Found a mistake or want to contribute to the documentation?
-            <a href="https://github.com/zendframework/zend-serializer/edit/master/docs/book/intro.md" target="_blank" class="help-wanted__link">
-                Edit this page on GitHub!
-            </a>
-        </p>
-    </div>
-
-                
             <!-- content:end -->
             </div>
             <div class="col-md-3 col-xs-12 sidebar">
@@ -397,7 +187,7 @@ classes/interfaces as follows:</p>
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="..">zend-serializer</a>
+            <a href="/.">zend-serializer</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -406,19 +196,19 @@ classes/interfaces as follows:</p>
             
                 
                     <li class="subnavigation__list-item ">
-                        <a href=".." class="subnavigation__link">zend-serializer</a>
-                    </li>
-                
-            
-                
-                    <li class="subnavigation__list-item subnavigation__list-item--active">
-                        <a href="./" class="subnavigation__link">Intro</a>
+                        <a href="/." class="subnavigation__link">zend-serializer</a>
                     </li>
                 
             
                 
                     <li class="subnavigation__list-item ">
-                        <a href="../adapter/" class="subnavigation__link">Adapters</a>
+                        <a href="/intro/" class="subnavigation__link">Intro</a>
+                    </li>
+                
+            
+                
+                    <li class="subnavigation__list-item ">
+                        <a href="/adapter/" class="subnavigation__link">Adapters</a>
                     </li>
                 
             
@@ -493,11 +283,11 @@ classes/interfaces as follows:</p>
 </footer>
 
     <script>
-        var base_url = '..',
+        var base_url = '/',
             siteName = 'zend-serializer';
     </script>
-    <script src="../js/scripts-8d7ae56abf.js"></script>
-        <script src="../search/main.js"></script>
+    <script src="//js/scripts-8d7ae56abf.js"></script>
+        <script src="/search/main.js"></script>
 
     
     <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
