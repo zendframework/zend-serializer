@@ -248,7 +248,7 @@ deserializing PHP types to and from different representations.</p>
 <p>Serializing adapters can either be created from the provided
 <code>Zend\Serializer\Serializer::factory</code> method, or by instantiating one of the
 <code>Zend\Serializer\Adapter\*</code> classes.</p>
-<pre class="codehilite"><code class="language-php">use Zend\Serializer\Adapter;
+<p> <pre class=codehilite><code class=language-php>use Zend\Serializer\Adapter;
 use Zend\Serializer\Exception;
 use Zend\Serializer\Serializer;
 
@@ -269,8 +269,7 @@ try {
     // now $data == $unserialized
 } catch (Exception\ExceptionInterface $e) {
     echo $e;
-}</code></pre>
-
+}</code></pre></p>
 <p>The method <code>serialize()</code> generates a storable string. To regenerate this
 serialized data, call the method <code>unserialize()</code>.</p>
 <p>Any time an error is encountered serializing or unserializing, the adapter will
@@ -280,7 +279,7 @@ to define and use a default serializer. That serializer will be used by default
 by other components like <code>Zend\Cache\Storage\Plugin\Serializer</code>.</p>
 <p>To define and use the default serializer, use the static serialization methods
 of the basic <code>Zend\Serializer\Serializer</code>:</p>
-<pre class="codehilite"><code class="language-php">use Zend\Serializer\Adapter;
+<p> <pre class=codehilite><code class=language-php>use Zend\Serializer\Adapter;
 use Zend\Serializer\Exception;
 use Zend\Serializer\Serializer;
 
@@ -294,8 +293,7 @@ try {
     // now $data == $unserialized
 } catch (Exception\ExceptionInterface $e) {
     echo $e;
-}</code></pre>
-
+}</code></pre></p>
 <h2 id="basic-configuration-options">Basic configuration Options</h2>
 <p>To configure a serializer adapter, you can optionally use an instance of
 <code>Zend\Serializer\Adapter\AdapterOptions</code>, an instance of one of the adapter
@@ -411,7 +409,7 @@ classes/interfaces as follows:</p>
     <div class="help-wanted">
         <p>
             Found a mistake or want to contribute to the documentation?
-            <a href="https://github.com/zendframework/zend-serializer/edit/master/docs/intro.md" target="_blank" class="help-wanted__link">
+            <a href="https://github.com/zendframework/zend-serializer/edit/master/docs/book/intro.md" target="_blank" class="help-wanted__link">
                 Edit this page on GitHub!
             </a>
         </p>
