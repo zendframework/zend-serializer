@@ -12,7 +12,7 @@
         "issues": "https://github.com/zendframework/zend-serializer/issues",
         "source": "https://github.com/zendframework/zend-serializer",
         "rss": "https://github.com/zendframework/zend-serializer/releases.atom",
-        "slack": "https://zendframework-slack.herokuapp.com",
+        "chat": "https://zendframework-slack.herokuapp.com",
         "forum": "https://discourse.zendframework.com/c/questions/components"
     },
     "require": {
