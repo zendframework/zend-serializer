@@ -14,7 +14,7 @@ use Zend\Serializer;
 
 /**
  * @group      Zend_Serializer
- * @covers Zend\Serializer\Adapter\PythonPickle
+ * @covers \Zend\Serializer\Adapter\PythonPickle
  */
 class PythonPickleSerializeProtocol0Test extends TestCase
 {
@@ -23,7 +23,7 @@ class PythonPickleSerializeProtocol0Test extends TestCase
      */
     private $adapter;
 
-    public function setUp()
+    protected function setUp()
     {
         $options = new Serializer\Adapter\PythonPickleOptions([
             'protocol' => 0
@@ -31,7 +31,7 @@ class PythonPickleSerializeProtocol0Test extends TestCase
         $this->adapter = new Serializer\Adapter\PythonPickle($options);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->adapter = null;
     }

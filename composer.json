@@ -1,6 +1,6 @@
 {
     "name": "zendframework/zend-serializer",
-    "description": "provides an adapter based interface to simply generate storable representation of PHP types by different facilities, and recover",
+    "description": "Serialize and deserialize PHP structures to a variety of representations",
     "license": "BSD-3-Clause",
     "keywords": [
         "zf",
@@ -12,7 +12,7 @@
         "issues": "https://github.com/zendframework/zend-serializer/issues",
         "source": "https://github.com/zendframework/zend-serializer",
         "rss": "https://github.com/zendframework/zend-serializer/releases.atom",
-        "slack": "https://zendframework-slack.herokuapp.com",
+        "chat": "https://zendframework-slack.herokuapp.com",
         "forum": "https://discourse.zendframework.com/c/questions/components"
     },
     "require": {
@@ -21,7 +21,7 @@
         "zendframework/zend-stdlib": "^2.7 || ^3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.7.25 || ^6.4.4",
+        "phpunit/phpunit": "^5.7.27 || ^6.5.14 || ^7.5.16",
         "zendframework/zend-coding-standard": "~1.0.0",
         "zendframework/zend-math": "^2.6 || ^3.0",
         "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3"
