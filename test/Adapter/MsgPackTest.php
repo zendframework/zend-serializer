@@ -15,7 +15,7 @@ use Zend\Serializer\Exception\ExtensionNotLoadedException;
 
 /**
  * @group      Zend_Serializer
- * @covers Zend\Serializer\Adapter\MsgPack
+ * @covers \Zend\Serializer\Adapter\MsgPack
  */
 class MsgPackTest extends TestCase
 {
@@ -24,7 +24,7 @@ class MsgPackTest extends TestCase
      */
     private $adapter;
 
-    public function setUp()
+    protected function setUp()
     {
         if (! extension_loaded('msgpack')) {
             try {
@@ -37,7 +37,7 @@ class MsgPackTest extends TestCase
         $this->adapter = new Serializer\Adapter\MsgPack();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->adapter = null;
     }

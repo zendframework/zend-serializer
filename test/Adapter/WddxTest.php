@@ -15,7 +15,7 @@ use Zend\Serializer\Exception\ExtensionNotLoadedException;
 
 /**
  * @group      Zend_Serializer
- * @covers Zend\Serializer\Adapter\Wddx
+ * @covers \Zend\Serializer\Adapter\Wddx
  */
 class WddxTest extends TestCase
 {
@@ -24,7 +24,7 @@ class WddxTest extends TestCase
      */
     private $adapter;
 
-    public function setUp()
+    protected function setUp()
     {
         if (! extension_loaded('wddx')) {
             try {
@@ -37,7 +37,7 @@ class WddxTest extends TestCase
         $this->adapter = new Serializer\Adapter\Wddx();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->adapter = null;
     }
