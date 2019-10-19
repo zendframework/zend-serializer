@@ -1,10 +1,9 @@
 docs_dir: docs/book
 site_dir: docs/html
-pages:
-    - index.md
-    - Intro: intro.md
+nav:
+    - Home: index.md
+    - Introduction: intro.md
     - Adapters: adapter.md
 site_name: zend-serializer
-site_description: zend-serializer
+site_description: "Serialize and deserialize PHP structures to a variety of representations"
 repo_url: 'https://github.com/zendframework/zend-serializer'
-copyright: 'Copyright (c) 2005-2017 <a href="http://www.zend.com/">Zend Technologies USA Inc.</a>'

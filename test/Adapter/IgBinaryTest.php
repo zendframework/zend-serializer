@@ -15,7 +15,7 @@ use Zend\Serializer\Exception\ExtensionNotLoadedException;
 
 /**
  * @group      Zend_Serializer
- * @covers Zend\Serializer\Adapter\IgBinary
+ * @covers \Zend\Serializer\Adapter\IgBinary
  */
 class IgBinaryTest extends TestCase
 {
@@ -24,7 +24,7 @@ class IgBinaryTest extends TestCase
      */
     private $adapter;
 
-    public function setUp()
+    protected function setUp()
     {
         if (! extension_loaded('igbinary')) {
             try {
@@ -37,7 +37,7 @@ class IgBinaryTest extends TestCase
         $this->adapter = new Serializer\Adapter\IgBinary();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->adapter = null;
     }

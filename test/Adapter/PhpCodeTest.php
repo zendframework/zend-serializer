@@ -13,14 +13,14 @@ use Zend\Serializer;
 use ZendTest\Serializer\TestAsset\Dummy;
 
 /**
- * @covers Zend\Serializer\Adapter\PhpCode
+ * @covers \Zend\Serializer\Adapter\PhpCode
  */
 class PhpCodeTest extends TestCase
 {
     /** @var Serializer\Adapter\PhpCode */
     private $adapter;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->adapter = new Serializer\Adapter\PhpCode();
     }

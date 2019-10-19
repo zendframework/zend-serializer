@@ -23,12 +23,12 @@ class PhpSerializeTest extends TestCase
      */
     private $adapter;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->adapter = new Serializer\Adapter\PhpSerialize();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->adapter = null;
     }

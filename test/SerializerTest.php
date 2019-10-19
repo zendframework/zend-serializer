@@ -19,11 +19,11 @@ use Zend\ServiceManager\ServiceManager;
 
 /**
  * @group      Zend_Serializer
- * @covers Zend\Serializer\Serializer
+ * @covers \Zend\Serializer\Serializer
  */
 class SerializerTest extends TestCase
 {
-    public function tearDown()
+    protected function tearDown()
     {
         Serializer::resetAdapterPluginManager();
     }

@@ -14,7 +14,7 @@ use Zend\Serializer;
 
 /**
  * @group      Zend_Serializer
- * @covers Zend\Serializer\Adapter\PythonPickle
+ * @covers \Zend\Serializer\Adapter\PythonPickle
  */
 class PythonPickleUnserializeTest extends TestCase
 {
@@ -23,12 +23,12 @@ class PythonPickleUnserializeTest extends TestCase
      */
     private $adapter;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->adapter = new Serializer\Adapter\PythonPickle();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $this->adapter = null;
     }
