@@ -2,7 +2,7 @@
 
 > ## Repository abandoned 2019-12-31
 >
-> This repository has moved to laminas/laminas-serializer.
+> This repository has moved to [laminas/laminas-serializer](https://github.com/laminas/laminas-serializer).
 
 [![Build Status](https://secure.travis-ci.org/zendframework/zend-serializer.svg?branch=master)](https://secure.travis-ci.org/zendframework/zend-serializer)
 [![Coverage Status](https://coveralls.io/repos/github/zendframework/zend-serializer/badge.svg?branch=master)](https://coveralls.io/github/zendframework/zend-serializer?branch=master)
